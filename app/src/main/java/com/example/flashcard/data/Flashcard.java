@@ -2,7 +2,7 @@ package com.example.flashcard.data;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "flashcard")
+@Entity(tableName = "flashcards")
 public class Flashcard {
     @PrimaryKey(autoGenerate = true)
     private int id;
