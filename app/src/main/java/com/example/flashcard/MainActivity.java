@@ -49,13 +49,6 @@ public class MainActivity extends AppCompatActivity {
         if (lessonintent.hasExtra("KEY_LESSON_ID")) {
             // 1. Lấy ID bài học ra và lưu vào biến toàn cục
             currentLessonId = lessonintent.getIntExtra("KEY_LESSON_ID", -1);
-
-            // Lấy tên bài học để hiện tiêu đề (nếu có)
-            if(lessonintent.hasExtra("KEY_TOPIC_NAME")) {
-                String topicName = lessonintent.getStringExtra("KEY_TOPIC_NAME");
-                setTitle("Bài học: " + topicName);
-            }
-
             // 2. Gọi hàm load dữ liệu theo ID (Sửa lỗi logic cũ của bạn ở đây)
             if (currentLessonId != -1) {
                 mFlashcardViewModel.getFlashcardsByLessonId(currentLessonId).observe(this, new Observer<List<Flashcard>>() {
@@ -104,13 +97,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Kiểm tra đúng là phản hồi từ màn hình Thêm Flashcard và kết quả OK
         if (requestCode == ADD_FLASHCARD_REQUEST && resultCode == RESULT_OK) {
-            String topic = data.getStringExtra(AddEditFlashcardActivity.EXTRA_TOPIC);
+//            String topic = data.getStringExtra(AddEditFlashcardActivity.EXTRA_TOPIC);
             String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
 
             // Tạo flashcard mới và lưu vào Database thông qua ViewModel
             if (currentLessonId != -1) {
-                Flashcard flashcard = new Flashcard(topic, front, back, currentLessonId);
+                Flashcard flashcard = new Flashcard(front, back, currentLessonId);
                 mFlashcardViewModel.insert(flashcard);
                 Toast.makeText(this, "Đã lưu thẻ nhớ vào bài học!", Toast.LENGTH_SHORT).show();
             } else {

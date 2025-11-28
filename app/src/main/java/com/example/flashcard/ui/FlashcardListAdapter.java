@@ -35,8 +35,7 @@ public class FlashcardListAdapter extends ListAdapter<Flashcard, FlashcardListAd
         public boolean areContentsTheSame(@NonNull Flashcard oldItem, @NonNull Flashcard newItem) {
             // So sánh nội dung (để xem có cần vẽ lại giao diện không)
             return oldItem.getFrontText().equals(newItem.getFrontText()) &&
-                    oldItem.getBackText().equals(newItem.getBackText()) &&
-                    oldItem.getTopic().equals(newItem.getTopic());
+                    oldItem.getBackText().equals(newItem.getBackText());
         }
     };
 
@@ -54,7 +53,6 @@ public class FlashcardListAdapter extends ListAdapter<Flashcard, FlashcardListAd
         // Lấy flashcard tại vị trí hiện tại và đổ dữ liệu
         Flashcard currentFlashcard = getItem(position);
         holder.textViewFront.setText(currentFlashcard.getFrontText());
-        holder.textViewTopic.setText(currentFlashcard.getTopic());
     }
 
     // Hàm để lấy Flashcard tại vị trí cụ thể (dùng khi vuốt để xóa)
@@ -65,12 +63,10 @@ public class FlashcardListAdapter extends ListAdapter<Flashcard, FlashcardListAd
     // ViewHolder: Nắm giữ các thành phần giao diện
     class FlashcardViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewFront;
-        private TextView textViewTopic;
 
         public FlashcardViewHolder(View itemView) {
             super(itemView);
             textViewFront = itemView.findViewById(R.id.textViewFront);
-            textViewTopic = itemView.findViewById(R.id.textViewTopic);
 
             // Bắt sự kiện click vào cả cái thẻ
             itemView.setOnClickListener(new View.OnClickListener() {

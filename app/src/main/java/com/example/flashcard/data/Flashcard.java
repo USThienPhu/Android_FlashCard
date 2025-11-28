@@ -17,15 +17,13 @@ import androidx.room.PrimaryKey;
 public class Flashcard {
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String topic;
     private String frontText;
     private String backText;
     private boolean isMemorized;
 
     private final int lessonOwnerId;
 
-    public Flashcard(String topic, String frontText, String backText, int lessonOwnerId) {
-        this.topic = topic;
+    public Flashcard(String frontText, String backText, int lessonOwnerId) {
         this.frontText = frontText;
         this.backText = backText;
         this.isMemorized = false;
@@ -39,8 +37,6 @@ public class Flashcard {
     }
 
 
-    public String getTopic() { return topic; }
-    public void setTopic(String topic) { this.topic = topic; }
 
     public String getFrontText() { return frontText; }
     public void setFrontText(String frontText) { this.frontText = frontText; }

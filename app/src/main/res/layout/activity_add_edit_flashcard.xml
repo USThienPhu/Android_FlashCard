@@ -9,19 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:hint="Tên phần (VD: Unit 1)">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edit_text_topic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textCapSentences" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
         android:hint="Mặt trước (Câu hỏi)">
 
         <com.google.android.material.textfield.TextInputEditText

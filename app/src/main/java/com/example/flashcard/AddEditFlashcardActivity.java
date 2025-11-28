@@ -16,11 +16,9 @@ import android.widget.Toast;
 public class AddEditFlashcardActivity extends AppCompatActivity {
 
     // Các hằng số (key) để gửi dữ liệu
-    public static final String EXTRA_TOPIC = "com.example.flashcardapp.EXTRA_TOPIC";
     public static final String EXTRA_FRONT = "com.example.flashcardapp.EXTRA_FRONT";
     public static final String EXTRA_BACK = "com.example.flashcardapp.EXTRA_BACK";
 
-    private EditText editTextTopic;
     private EditText editTextFront;
     private EditText editTextBack;
     private Button buttonSave;
@@ -30,7 +28,6 @@ public class AddEditFlashcardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_edit_flashcard);
 
-        editTextTopic = findViewById(R.id.edit_text_topic);
         editTextFront = findViewById(R.id.edit_text_front);
         editTextBack = findViewById(R.id.edit_text_back);
         buttonSave = findViewById(R.id.button_save);
@@ -45,19 +42,19 @@ public class AddEditFlashcardActivity extends AppCompatActivity {
 
     // Hàm để lưu dữ liệu
     private void saveFlashcard() {
-        String topic = editTextTopic.getText().toString();
+//        String topic = editTextTopic.getText().toString();
         String front = editTextFront.getText().toString();
         String back = editTextBack.getText().toString();
 
         // Kiểm tra xem có ô nào bị bỏ trống không
-        if (topic.trim().isEmpty() || front.trim().isEmpty() || back.trim().isEmpty()) {
+        if (front.trim().isEmpty() || back.trim().isEmpty()) {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Đóng gói dữ liệu vào Intent
         Intent data = new Intent();
-        data.putExtra(EXTRA_TOPIC, topic);
+//        data.putExtra(EXTRA_TOPIC, topic);
         data.putExtra(EXTRA_FRONT, front);
         data.putExtra(EXTRA_BACK, back);
 
