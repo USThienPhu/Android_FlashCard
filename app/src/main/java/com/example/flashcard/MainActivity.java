@@ -46,12 +46,18 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 4. Xử lý click vào item (Ví dụ: Để sửa hoặc xem chi tiết lật mặt)
-        adapter.setOnItemClickListener(new FlashcardListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Flashcard flashcard) {
-                Toast.makeText(MainActivity.this, "Clicked: " + flashcard.getFrontText(), Toast.LENGTH_SHORT).show();
-                // Sau này sẽ code mở màn hình lật mặt ở đây
-            }
+//        adapter.setOnItemClickListener(new FlashcardListAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(Flashcard flashcard) {
+//                Toast.makeText(MainActivity.this, "Clicked: " + flashcard.getFrontText(), Toast.LENGTH_SHORT).show();
+//                // Sau này sẽ code mở màn hình lật mặt ở đây
+//            }
+//        });
+        adapter.setOnItemClickListener(flashcard -> {
+            Intent intent = new Intent(MainActivity.this, FlipActivity.class);
+            intent.putExtra("front", flashcard.getFrontText());
+            intent.putExtra("back", flashcard.getBackText());
+            startActivity(intent);
         });
 
         // Nút FAB để thêm mới (sẽ code ở bước sau)

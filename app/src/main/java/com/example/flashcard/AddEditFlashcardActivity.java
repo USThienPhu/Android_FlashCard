@@ -35,13 +35,6 @@ public class AddEditFlashcardActivity extends AppCompatActivity {
         editTextBack = findViewById(R.id.edit_text_back);
         buttonSave = findViewById(R.id.button_save);
 
-        // Thêm nút đóng (dấu X) ở góc trái
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setHomeAsUpIndicator(android.R.drawable.ic_menu_close_clear_cancel);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Dòng này quan trọng để hiện nút
-            setTitle("Thêm thẻ mới");
-        }
-
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -13,6 +13,14 @@
         android:theme="@style/Theme.FlashCard">
         <activity
             android:name=".MainActivity"
+            >
+
+        </activity>
+        <activity
+            android:name=".AddEditFlashcardActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MenuActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,9 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".AddEditFlashcardActivity"
-            android:parentActivityName=".MainActivity" />
+        <activity android:name=".FlipActivity" />
+
     </application>
 
 </manifest>
