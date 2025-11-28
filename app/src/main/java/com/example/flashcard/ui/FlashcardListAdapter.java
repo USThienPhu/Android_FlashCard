@@ -61,23 +61,58 @@ public class FlashcardListAdapter extends ListAdapter<Flashcard, FlashcardListAd
     }
 
     // ViewHolder: Nắm giữ các thành phần giao diện
+    // ViewHolder: Nắm giữ các thành phần giao diện
     class FlashcardViewHolder extends RecyclerView.ViewHolder {
         private TextView textViewFront;
+        private boolean isShowingFront = true; // Biến theo dõi đang là mặt trước hay sau
 
         public FlashcardViewHolder(View itemView) {
             super(itemView);
             textViewFront = itemView.findViewById(R.id.textViewFront);
 
-            // Bắt sự kiện click vào cả cái thẻ
+            // Xử lý click ngay tại đây
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Lấy vị trí thẻ hiện tại
                     int position = getAdapterPosition();
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(getItem(position));
+
+                    // Kiểm tra vị trí hợp lệ
+                    if (position != RecyclerView.NO_POSITION) {
+                        // Lấy dữ liệu thẻ tương ứng
+                        Flashcard currentCard = getItem(position);
+
+                        // Gọi hàm lật thẻ
+                        flipCard(itemView, currentCard);
                     }
                 }
             });
+        }
+
+        // --- HÀM LẬT THẺ (ANIMATION) ---
+        private void flipCard(View view, Flashcard card) {
+            // Bước 1: Xoay 90 độ (Xoay đi để ẩn)
+            // Bạn có thể đổi "rotationY" thành "rotationX" nếu muốn lật kiểu tờ lịch
+            view.animate().rotationY(90f).setDuration(200)
+                    .withEndAction(new Runnable() {
+                        @Override
+                        public void run() {
+                            // Bước 2: Tại góc 90 độ (thẻ mỏng như tờ giấy), ta đổi nội dung
+                            if (isShowingFront) {
+                                textViewFront.setText(card.getBackText()); // Hiện mặt sau
+//                                view.setBackgroundResource(android.R.color.holo_blue_light); // (Tùy chọn) Đổi màu nền cho khác bọt
+                            } else {
+                                textViewFront.setText(card.getFrontText()); // Hiện mặt trước
+//                                view.setBackgroundResource(android.R.color.white); // (Tùy chọn) Trả lại màu trắng
+                            }
+
+                            // Đảo ngược trạng thái
+                            isShowingFront = !isShowingFront;
+                            // Bước 3: Xoay từ -90 về 0 độ (Xoay về để hiện)
+                            view.setRotationY(-90f);
+                            view.animate().rotationY(0f).setDuration(200).start();
+                        }
+                    }).start();
         }
     }
 
@@ -85,6 +120,8 @@ public class FlashcardListAdapter extends ListAdapter<Flashcard, FlashcardListAd
     public interface OnItemClickListener {
         void onItemClick(Flashcard flashcard);
     }
+
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;

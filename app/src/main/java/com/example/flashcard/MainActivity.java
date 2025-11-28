@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -59,28 +60,14 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-//        else {
-//            // Trường hợp mở app lên mà không chọn bài (nếu có logic này)
-//            // Load tất cả hoặc thông báo lỗi
-//            Toast.makeText(this, "Chưa chọn bài học!", Toast.LENGTH_SHORT).show();
-//        }
-
         // 4. Xử lý click vào item (Ví dụ: Để sửa hoặc xem chi tiết lật mặt)
-//        adapter.setOnItemClickListener(new FlashcardListAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(Flashcard flashcard) {
-//                Toast.makeText(MainActivity.this, "Clicked: " + flashcard.getFrontText(), Toast.LENGTH_SHORT).show();
-//                // Sau này sẽ code mở màn hình lật mặt ở đây
-//            }
+    //        adapter.setOnItemClickListener(flashcard -> {
+//            Intent FlipIntent = new Intent(MainActivity.this, FlipActivity.class);
+//            FlipIntent.putExtra("front", flashcard.getFrontText());
+//            FlipIntent.putExtra("back", flashcard.getBackText());
+//            startActivity(FlipIntent);
 //        });
-        adapter.setOnItemClickListener(flashcard -> {
-            Intent FlipIntent = new Intent(MainActivity.this, FlipActivity.class);
-            FlipIntent.putExtra("front", flashcard.getFrontText());
-            FlipIntent.putExtra("back", flashcard.getBackText());
-            startActivity(FlipIntent);
-
-
-        });
+//        adapter.setOnItemClickListener();
 
         // Nút FAB để thêm mới (sẽ code ở bước sau)
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -91,13 +78,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Kiểm tra đúng là phản hồi từ màn hình Thêm Flashcard và kết quả OK
         if (requestCode == ADD_FLASHCARD_REQUEST && resultCode == RESULT_OK) {
-//            String topic = data.getStringExtra(AddEditFlashcardActivity.EXTRA_TOPIC);
             String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
 
