@@ -45,4 +45,7 @@ public class FlashcardViewModel extends AndroidViewModel{
     public void update(Flashcard flashcard) {
         mRepository.update(flashcard);
     }
+    public LiveData<List<Flashcard>> getFlashcardsByLessonId(int lessonId) {
+        return mRepository.getFlashcardsByLessonId(lessonId);
+    }
 }

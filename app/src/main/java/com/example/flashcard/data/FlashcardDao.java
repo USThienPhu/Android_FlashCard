@@ -24,7 +24,7 @@ public interface FlashcardDao {
     LiveData<List<Flashcard>> searchFlashcards(String searchQuery);
 
     @Query("SELECT * FROM flashcards WHERE lessonOwnerId = :lessonId")
-    LiveData<List<Flashcard>> getFlashcardsByFolder(int lessonId);
+    LiveData<List<Flashcard>> getFlashcardsByLessonId(int lessonId);
     @Update
     void update(Flashcard flashcard);
 

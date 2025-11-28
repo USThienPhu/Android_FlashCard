@@ -1,6 +1,7 @@
 package com.example.flashcard;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static final int ADD_FLASHCARD_REQUEST = 1;
     private FlashcardViewModel mFlashcardViewModel;
-
+    private int currentLessonId = -1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +38,39 @@ public class MainActivity extends AppCompatActivity {
 
         // 3. Quan sát dữ liệu (Observer)
         // Bất cứ khi nào database thay đổi, đoạn code trong onChanged sẽ chạy
-        mFlashcardViewModel.getAllFlashcards().observe(this, new androidx.lifecycle.Observer<List<Flashcard>>() {
-            @Override
-            public void onChanged(List<Flashcard> flashcards) {
-                // Cập nhật danh sách mới vào Adapter
-                adapter.submitList(flashcards);
+//        mFlashcardViewModel.getAllFlashcards().observe(this, new androidx.lifecycle.Observer<List<Flashcard>>() {
+//            @Override
+//            public void onChanged(List<Flashcard> flashcards) {
+//                // Cập nhật danh sách mới vào Adapter
+//                adapter.submitList(flashcards);
+//            }
+//        });
+        Intent lessonintent = getIntent();
+        if (lessonintent.hasExtra("KEY_LESSON_ID")) {
+            // 1. Lấy ID bài học ra và lưu vào biến toàn cục
+            currentLessonId = lessonintent.getIntExtra("KEY_LESSON_ID", -1);
+
+            // Lấy tên bài học để hiện tiêu đề (nếu có)
+            if(lessonintent.hasExtra("KEY_TOPIC_NAME")) {
+                String topicName = lessonintent.getStringExtra("KEY_TOPIC_NAME");
+                setTitle("Bài học: " + topicName);
             }
-        });
+
+            // 2. Gọi hàm load dữ liệu theo ID (Sửa lỗi logic cũ của bạn ở đây)
+            if (currentLessonId != -1) {
+                mFlashcardViewModel.getFlashcardsByLessonId(currentLessonId).observe(this, new Observer<List<Flashcard>>() {
+                    @Override
+                    public void onChanged(List<Flashcard> flashcards) {
+                        adapter.submitList(flashcards);
+                    }
+                });
+            }
+        }
+//        else {
+//            // Trường hợp mở app lên mà không chọn bài (nếu có logic này)
+//            // Load tất cả hoặc thông báo lỗi
+//            Toast.makeText(this, "Chưa chọn bài học!", Toast.LENGTH_SHORT).show();
+//        }
 
         // 4. Xử lý click vào item (Ví dụ: Để sửa hoặc xem chi tiết lật mặt)
 //        adapter.setOnItemClickListener(new FlashcardListAdapter.OnItemClickListener() {
@@ -54,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         adapter.setOnItemClickListener(flashcard -> {
-//            Intent intent = new Intent(MainActivity.this, FlipActivity.class);
-//            intent.putExtra("front", flashcard.getFrontText());
-//            intent.putExtra("back", flashcard.getBackText());
-//            startActivity(intent);
+            Intent FlipIntent = new Intent(MainActivity.this, FlipActivity.class);
+            FlipIntent.putExtra("front", flashcard.getFrontText());
+            FlipIntent.putExtra("back", flashcard.getBackText());
+            startActivity(FlipIntent);
 
 
         });
@@ -82,10 +109,13 @@ public class MainActivity extends AppCompatActivity {
             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
 
             // Tạo flashcard mới và lưu vào Database thông qua ViewModel
-            Flashcard flashcard = new Flashcard(topic, front, back, 0);
-            mFlashcardViewModel.insert(flashcard);
-
-            Toast.makeText(this, "Đã lưu thẻ nhớ!", Toast.LENGTH_SHORT).show();
+            if (currentLessonId != -1) {
+                Flashcard flashcard = new Flashcard(topic, front, back, currentLessonId);
+                mFlashcardViewModel.insert(flashcard);
+                Toast.makeText(this, "Đã lưu thẻ nhớ vào bài học!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Lỗi: Không xác định được bài học!", Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(this, "Hủy lưu thẻ", Toast.LENGTH_SHORT).show();
         }

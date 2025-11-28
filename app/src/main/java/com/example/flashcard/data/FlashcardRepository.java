@@ -47,4 +47,8 @@ public class FlashcardRepository {
             mFlashcardDao.update(flashcard);
         });
     }
+    public LiveData<List<Flashcard>> getFlashcardsByLessonId(int lessonId) {
+        return mFlashcardDao.getFlashcardsByLessonId(lessonId);
+    }
+
 }

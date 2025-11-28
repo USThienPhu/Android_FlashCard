@@ -44,6 +44,15 @@ public class LessonListActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(lesson -> {
             Toast.makeText(this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
             // TODO: Chuyển qua màn hình Flashcard theo LessonId
+            Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
+
+            // Gửi ID bài học (Quan trọng nhất)
+            intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
+
+            // Gửi thêm tên để hiển thị tiêu đề cho đẹp (Tùy chọn)
+            intent.putExtra("KEY_TOPIC_NAME", lesson.getName()); // Giả sử Lesson có hàm getLessonName()
+
+            startActivity(intent);
         });
 
         // Nút thêm Lesson
