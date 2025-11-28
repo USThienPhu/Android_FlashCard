@@ -13,7 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.flashcard.data.Flashcard;
-import com.example.flashcard.ui.FlashcardListAdapter;
+import com.example.flashcard.ui.FlashCard.FlashcardListAdapter;
 import com.example.flashcard.viewmodel.FlashcardViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         // 1. Thiết lập RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final FlashcardListAdapter adapter = new FlashcardListAdapter();
+        final FlashcardListAdapter adapter = new FlashcardListAdapter(v -> {});
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
