@@ -30,7 +30,30 @@ public class MainActivity extends AppCompatActivity {
 
         // 1. Thiết lập RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        final FlashcardListAdapter adapter = new FlashcardListAdapter(v -> {});
+        final FlashcardListAdapter adapter = new FlashcardListAdapter(new com.example.flashcard.ui.FlashCard.FlashcardClickListener() {
+            @Override
+            public void onItemClick(Flashcard flashcard) {
+                // Để trống vì bạn đã lật thẻ ngay trong ViewHolder rồi
+            }
+            @Override
+            public void onEditClick(Flashcard flashcard) {
+                // --- LOGIC SỬA ---
+                Intent intent = new Intent(MainActivity.this, AddEditFlashcardActivity.class);
+                // Gửi dữ liệu cũ sang màn hình nhập liệu
+                intent.putExtra(AddEditFlashcardActivity.EXTRA_FRONT, flashcard.getFrontText());
+                intent.putExtra(AddEditFlashcardActivity.EXTRA_BACK, flashcard.getBackText());
+                // QUAN TRỌNG: Gửi ID để biết đây là thẻ nào
+                // (Bạn cần chắc chắn bên AddEditFlashcardActivity có biến EXTRA_ID, nếu chưa thì cứ dùng chuỗi cứng như dưới)
+                intent.putExtra("com.example.flashcard.EXTRA_ID", flashcard.getId());
+                startActivityForResult(intent, ADD_FLASHCARD_REQUEST);
+            }
+            @Override
+            public void onDeleteClick(Flashcard flashcard) {
+                // --- LOGIC XÓA ---
+                mFlashcardViewModel.delete(flashcard);
+                Toast.makeText(MainActivity.this, "Đã xóa thẻ!", Toast.LENGTH_SHORT).show();
+            }
+        });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -84,21 +107,32 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Kiểm tra đúng là phản hồi từ màn hình Thêm Flashcard và kết quả OK
         if (requestCode == ADD_FLASHCARD_REQUEST && resultCode == RESULT_OK) {
             String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
 
-            // Tạo flashcard mới và lưu vào Database thông qua ViewModel
-            if (currentLessonId != -1) {
-                Flashcard flashcard = new Flashcard(front, back, currentLessonId);
-                mFlashcardViewModel.insert(flashcard);
-                Toast.makeText(this, "Đã lưu thẻ nhớ vào bài học!", Toast.LENGTH_SHORT).show();
-            } else {
+            // Lấy ID trả về (Mặc định là -1 nếu không có)
+            int id = data.getIntExtra("com.example.flashcard.EXTRA_ID", -1);
+
+            if (currentLessonId == -1) {
                 Toast.makeText(this, "Lỗi: Không xác định được bài học!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (id != -1) {
+                // --- TRƯỜNG HỢP SỬA (UPDATE) ---
+                Flashcard updateCard = new Flashcard(front, back, currentLessonId);
+                updateCard.setId(id); // Quan trọng: Phải gán đúng ID cũ
+                mFlashcardViewModel.update(updateCard);
+                Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
+            } else {
+                // --- TRƯỜNG HỢP THÊM MỚI (INSERT) ---
+                Flashcard newCard = new Flashcard(front, back, currentLessonId);
+                mFlashcardViewModel.insert(newCard);
+                Toast.makeText(this, "Đã lưu thẻ mới!", Toast.LENGTH_SHORT).show();
             }
         } else {
-            Toast.makeText(this, "Hủy lưu thẻ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Hủy thao tác", Toast.LENGTH_SHORT).show();
         }
     }
 }

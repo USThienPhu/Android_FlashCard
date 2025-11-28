@@ -1,7 +1,10 @@
 package com.example.flashcard.ui.FlashCard;
 
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +28,42 @@ public class FlashcardViewHolder extends RecyclerView.ViewHolder {
 
             Flashcard card = (Flashcard) v.getTag();   // Adapter sẽ setTag()
             flipCard(itemView, card);
+        });
+
+        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(v.getContext(), v);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu_flashcard, popupMenu.getMenu());
+                // (Mẹo nhỏ: Nếu bạn muốn hiện Icon trên PopupMenu, hãy xem phần Note bên dưới)
+                // 3. Xử lý sự kiện click (Dùng ID thay vì so sánh chuỗi String)
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Lấy thẻ hiện tại đang được nhấn giữ
+                        // (Bạn đã setTag trong hàm bind nên lấy ra rất dễ)
+                        Flashcard currentCard = (Flashcard) v.getTag();
+
+                        if (currentCard == null) return false; // Kiểm tra an toàn
+
+                        int id = item.getItemId();
+
+                        if (id == R.id.action_edit) {
+                            // Báo cho Activity biết: "Sửa thẻ này đi"
+                            listener.onEditClick(currentCard);
+                            return true;
+                        }
+                        else if (id == R.id.action_delete) {
+                            // Báo cho Activity biết: "Xóa thẻ này đi"
+                            listener.onDeleteClick(currentCard);
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+                return true; // Trả về true để báo là sự kiện đã được xử lý xong
+            }
         });
     }
 
