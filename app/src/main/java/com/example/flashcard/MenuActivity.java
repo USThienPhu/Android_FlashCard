@@ -41,7 +41,7 @@ public class MenuActivity  extends AppCompatActivity {
     }
 
     private void openStudyActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, LessonListActivity.class);
         startActivity(intent);
     }
 }

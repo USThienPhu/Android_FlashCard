@@ -8,7 +8,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.List;
 
 
 @Dao
@@ -24,6 +23,8 @@ public interface FlashcardDao {
     @Query("SELECT * FROM flashcards WHERE frontText LIKE '%' || :searchQuery || '%' OR backText LIKE '%' || :searchQuery || '%'")
     LiveData<List<Flashcard>> searchFlashcards(String searchQuery);
 
+    @Query("SELECT * FROM flashcards WHERE lessonOwnerId = :lessonId")
+    LiveData<List<Flashcard>> getFlashcardsByFolder(int lessonId);
     @Update
     void update(Flashcard flashcard);
 

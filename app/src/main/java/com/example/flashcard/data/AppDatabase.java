@@ -7,9 +7,10 @@ import androidx.room.RoomDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Flashcard.class}, version = 1, exportSchema = false)
+@Database(entities = {Flashcard.class, Lesson.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FlashcardDao   flashcardDao();
+    public abstract LessonDao lessonDao();
     private static volatile AppDatabase INSTANCE;
 
     //Thread for background operations
@@ -22,6 +23,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "flashcard_database")
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

@@ -54,10 +54,12 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        });
         adapter.setOnItemClickListener(flashcard -> {
-            Intent intent = new Intent(MainActivity.this, FlipActivity.class);
-            intent.putExtra("front", flashcard.getFrontText());
-            intent.putExtra("back", flashcard.getBackText());
-            startActivity(intent);
+//            Intent intent = new Intent(MainActivity.this, FlipActivity.class);
+//            intent.putExtra("front", flashcard.getFrontText());
+//            intent.putExtra("back", flashcard.getBackText());
+//            startActivity(intent);
+
+
         });
 
         // Nút FAB để thêm mới (sẽ code ở bước sau)
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
 
             // Tạo flashcard mới và lưu vào Database thông qua ViewModel
-            Flashcard flashcard = new Flashcard(topic, front, back);
+            Flashcard flashcard = new Flashcard(topic, front, back, 0);
             mFlashcardViewModel.insert(flashcard);
 
             Toast.makeText(this, "Đã lưu thẻ nhớ!", Toast.LENGTH_SHORT).show();

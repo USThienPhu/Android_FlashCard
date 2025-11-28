@@ -29,6 +29,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".FlipActivity" />
+        <activity android:name=".LessonListActivity" />
+        <activity
+            android:name=".AddLessonActivity"
+            android:parentActivityName=".LessonListActivity" />
 
     </application>
 
