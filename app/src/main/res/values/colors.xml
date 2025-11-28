@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="_OxFordBlue">#002147</color>
+    <color name="_UclaBlue">#536895</color>
+    <color name="_Pearl">#DBDABE</color>
+    <color name="_TanText">#d2b48c</color>
 </resources>
