@@ -15,11 +15,13 @@ import com.example.flashcard.ui.Lesson.LessonListAdapter;
 import com.example.flashcard.viewmodel.LessonViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import android.widget.Button;
 import android.widget.Toast;
 
 
 public class LessonListActivity extends AppCompatActivity {
     private LessonViewModel lessonViewModel;
+    Button btnShuffle;
     ActivityResultLauncher<Intent> addLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -66,22 +68,14 @@ public class LessonListActivity extends AppCompatActivity {
 
         lessonViewModel.getAllLessons().observe(this, adapter::submitList);
 
-        // Click vào lesson → mở danh sách flashcard của lesson đó
-//        adapter.setOnItemClickListener(lesson -> {
-//            Toast.makeText(this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
-//            // TODO: Chuyển qua màn hình Flashcard theo LessonId
-//            Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
-//            // Gửi ID bài học (Quan trọng nhất)
-//            intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
-//            // Gửi thêm tên để hiển thị tiêu đề cho đẹp (Tùy chọn)
-//            startActivity(intent);
-//        });
-
         FloatingActionButton fab = findViewById(R.id.fab_add_lesson);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddLessonActivity.class);
             addLauncher.launch(intent);
         });
 
+
     }
+
+
 }

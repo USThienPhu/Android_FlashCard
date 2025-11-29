@@ -16,6 +16,9 @@ public class LessonListAdapter extends ListAdapter<Lesson, LessonViewHolder> {
         super(DIFF_CALLBACK);
         this.listener = listener;
     }
+    public LessonListAdapter() {
+        super(DIFF_CALLBACK);
+    }
 
     private static final DiffUtil.ItemCallback<Lesson> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<>() {

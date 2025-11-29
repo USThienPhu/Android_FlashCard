@@ -3,15 +3,13 @@ package com.example.flashcard;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.flashcard.data.Flashcard;
@@ -19,19 +17,16 @@ import com.example.flashcard.ui.FlashCard.FlashcardListAdapter;
 import com.example.flashcard.viewmodel.FlashcardViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
     private FlashcardViewModel mFlashcardViewModel;
     private int currentLessonId = -1;
+    Button btnShuffle;
 
     ActivityResultLauncher<Intent> addEditLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     result -> {
-
                         if (result.getResultCode() == RESULT_OK) {
-
                             Intent data = result.getData();
                             if (data == null) return;
 
@@ -39,23 +34,20 @@ public class MainActivity extends AppCompatActivity {
                             String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
                             int id = data.getIntExtra(AddEditFlashcardActivity.EXTRA_ID, -1);
 
-                            if (id != -1) { //Update
+                            if (id != -1) { // Update
                                 Flashcard card = new Flashcard(front, back, currentLessonId);
                                 card.setId(id);
                                 mFlashcardViewModel.update(card);
                                 Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
-                            } else { //Insert
-//                                Flashcard newCard = new Flashcard(front, back, currentLessonId);
+                            } else { // Insert
                                 mFlashcardViewModel.insert(front, back, currentLessonId);
                                 Toast.makeText(this, "Đã tạo thẻ mới!", Toast.LENGTH_SHORT).show();
                             }
-
                         } else {
                             Toast.makeText(this, "Hủy thao tác!", Toast.LENGTH_SHORT).show();
                         }
                     }
             );
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,22 +73,25 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Đã xóa thẻ!", Toast.LENGTH_SHORT).show();
             }
         });
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // 1. Khởi tạo ViewModel
         mFlashcardViewModel = new ViewModelProvider(this).get(FlashcardViewModel.class);
 
+        // 2. Quan sát dữ liệu hiển thị (Bao gồm cả lúc load thường và lúc shuffle)
+        mFlashcardViewModel.getDisplayedFlashcards().observe(this, flashcards -> {
+            adapter.submitList(flashcards);
+        });
+
+        // 3. Lấy LessonID và báo cho ViewModel biết để load dữ liệu
         Intent lessonintent = getIntent();
         if (lessonintent.hasExtra("KEY_LESSON_ID")) {
-            // 1. Lấy ID bài học ra và lưu vào biến toàn cục
             currentLessonId = lessonintent.getIntExtra("KEY_LESSON_ID", -1);
-            // 2. Gọi hàm load dữ liệu theo ID (Sửa lỗi logic cũ của bạn ở đây)
             if (currentLessonId != -1) {
-                mFlashcardViewModel.getFlashcardsByLessonId(currentLessonId).observe(this, new Observer<List<Flashcard>>() {
-                    @Override
-                    public void onChanged(List<Flashcard> flashcards) {
-                        adapter.submitList(flashcards);
-                    }
-                });
+                // Gọi hàm này để ViewModel bắt đầu lấy dữ liệu từ DB lên
+                mFlashcardViewModel.setLessonId(currentLessonId);
             }
         }
 
@@ -104,6 +99,16 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddEditFlashcardActivity.class);
             addEditLauncher.launch(intent);
+        });
+
+        // 4. Xử lý nút Shuffle
+        btnShuffle = findViewById(R.id.btnShuffle);
+        btnShuffle.setOnClickListener(v -> {
+            // Gọi hàm shuffle trong ViewModel
+            mFlashcardViewModel.shuffle();
+            Toast.makeText(this, "Đã trộn thẻ!", Toast.LENGTH_SHORT).show();
+            // Cuộn lên đầu trang cho dễ nhìn
+            recyclerView.scrollToPosition(0);
         });
     }
 }

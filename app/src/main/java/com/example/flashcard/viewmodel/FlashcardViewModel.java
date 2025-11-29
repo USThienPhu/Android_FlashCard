@@ -4,14 +4,19 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
 import com.example.flashcard.data.Flashcard;
 import com.example.flashcard.data.FlashcardRepository;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class FlashcardViewModel extends AndroidViewModel{
     private  FlashcardRepository mRepository;
-    private final LiveData<List<Flashcard>> mAllFlashcards;
+    private final MediatorLiveData<List<Flashcard>> mDisplayedFlashcards = new MediatorLiveData<>();
+    private  LiveData<List<Flashcard>> mAllFlashcards;
 
     public FlashcardViewModel(@NonNull Application application) {
         super(application);
@@ -51,5 +56,33 @@ public class FlashcardViewModel extends AndroidViewModel{
     }
     public LiveData<List<Flashcard>> getFlashcardsByLessonId(int lessonId) {
         return mRepository.getFlashcardsByLessonId(lessonId);
+    }
+
+    public LiveData<List<Flashcard>> getDisplayedFlashcards() {
+        return mDisplayedFlashcards;
+    }
+
+    public void setLessonId(int lessonId) {
+        // 1. Gỡ bỏ source cũ nếu có (tránh xung đột)
+        if (mAllFlashcards != null) {
+            mDisplayedFlashcards.removeSource(mAllFlashcards);
+        }
+
+        // 2. Lấy dữ liệu từ Repo theo ID
+        mAllFlashcards = mRepository.getFlashcardsByLessonId(lessonId);
+
+        // 3. Gắn vào Mediator để hiển thị lên UI
+        mDisplayedFlashcards.addSource(mAllFlashcards, flashcards -> {
+            mDisplayedFlashcards.setValue(flashcards);
+        });
+    }
+
+    public void shuffle() {
+        List<Flashcard> current = mDisplayedFlashcards.getValue();
+        if (current != null && !current.isEmpty()) {
+            List<Flashcard> shuffled = new ArrayList<>(current);
+            Collections.shuffle(shuffled);
+            mDisplayedFlashcards.setValue(shuffled);
+        }
     }
 }

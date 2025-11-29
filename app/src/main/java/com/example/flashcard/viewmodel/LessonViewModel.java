@@ -9,6 +9,8 @@ import androidx.lifecycle.LiveData;
 import com.example.flashcard.data.Lesson;
 import com.example.flashcard.data.LessonRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class LessonViewModel extends AndroidViewModel {
@@ -21,6 +23,7 @@ public class LessonViewModel extends AndroidViewModel {
         mRepository = new LessonRepository(application);
         mAllLessons = mRepository.getAllLessons();
     }
+
 
     public LiveData<List<Lesson>> getAllLessons() {
         return mAllLessons;

@@ -8,6 +8,16 @@
     android:background="@color/_Pearl"
     tools:context=".MainActivity">
 
+
+
+    <Button
+        android:id="@+id/btnShuffle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Shuffle"
+        android:gravity="clip_horizontal"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="0dp"
