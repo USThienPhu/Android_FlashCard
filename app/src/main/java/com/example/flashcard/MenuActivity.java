@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MenuActivity  extends AppCompatActivity {
     private Button btnStudy;
     private Button btnSetting;
-    private Button btnExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +18,6 @@ public class MenuActivity  extends AppCompatActivity {
 
         btnStudy = findViewById(R.id.btnStudy);
         btnSetting = findViewById(R.id.btnSetting);
-        btnExit = findViewById(R.id.btnExit);
 
 
         btnStudy.setOnClickListener(new View.OnClickListener() {
@@ -33,11 +31,7 @@ public class MenuActivity  extends AppCompatActivity {
             public void onClick(View v) {
             }
         });
-        btnExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+
     }
 
     private void openStudyActivity() {

@@ -1,5 +1,7 @@
 package com.example.flashcard;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,9 +19,22 @@ import android.widget.Toast;
 
 
 public class LessonListActivity extends AppCompatActivity {
-
     private LessonViewModel lessonViewModel;
-    public static final int ADD_LESSON_REQUEST = 1000;
+    ActivityResultLauncher<Intent> addLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data == null) return;
+                            String lessonName = data.getStringExtra(AddLessonActivity.EXTRA_LESSON_NAME);
+                            lessonViewModel.insert(lessonName);
+                        } else {
+                            Toast.makeText(this, "Hủy thao tác!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +42,21 @@ public class LessonListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lesson_list);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerview_lessons);
-        LessonListAdapter adapter = new LessonListAdapter();
+        LessonListAdapter adapter = new LessonListAdapter(new com.example.flashcard.ui.Lesson.LessonClickListener() {
+            @Override
+            public void onItemClick(Lesson lesson) {
+                Toast.makeText(LessonListActivity.this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
+                intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onDeleteClick(Lesson lesson) {
+                lessonViewModel.delete(lesson);
+            }
+        });
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -35,42 +64,24 @@ public class LessonListActivity extends AppCompatActivity {
         // ViewModel
         lessonViewModel = new ViewModelProvider(this).get(LessonViewModel.class);
 
-        lessonViewModel.getAllLessons().observe(this, lessons -> {
-            adapter.submitList(lessons);
-        });
+        lessonViewModel.getAllLessons().observe(this, adapter::submitList);
 
         // Click vào lesson → mở danh sách flashcard của lesson đó
-        adapter.setOnItemClickListener(lesson -> {
-            Toast.makeText(this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
-            // TODO: Chuyển qua màn hình Flashcard theo LessonId
-            Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
-            // Gửi ID bài học (Quan trọng nhất)
-            intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
-            // Gửi thêm tên để hiển thị tiêu đề cho đẹp (Tùy chọn)
-            startActivity(intent);
-        });
+//        adapter.setOnItemClickListener(lesson -> {
+//            Toast.makeText(this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
+//            // TODO: Chuyển qua màn hình Flashcard theo LessonId
+//            Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
+//            // Gửi ID bài học (Quan trọng nhất)
+//            intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
+//            // Gửi thêm tên để hiển thị tiêu đề cho đẹp (Tùy chọn)
+//            startActivity(intent);
+//        });
 
-        // Nút thêm Lesson
         FloatingActionButton fab = findViewById(R.id.fab_add_lesson);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddLessonActivity.class);
-            startActivityForResult(intent, ADD_LESSON_REQUEST);
+            addLauncher.launch(intent);
         });
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ADD_LESSON_REQUEST && resultCode == RESULT_OK) {
-            String lessonName = data.getStringExtra(AddLessonActivity.EXTRA_LESSON_NAME);
-
-            Lesson lesson = new Lesson(lessonName);
-            lessonViewModel.insert(lesson);
-
-            Toast.makeText(this, "Thêm Lesson thành công!", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Hủy thêm Lesson", Toast.LENGTH_SHORT).show();
-        }
     }
 }

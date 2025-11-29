@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.flashcard.data.Flashcard;
 import com.example.flashcard.data.Lesson;
 import com.example.flashcard.data.LessonRepository;
 
@@ -30,5 +29,12 @@ public class LessonViewModel extends AndroidViewModel {
     public void insert(Lesson lesson) {
         mRepository.insert(lesson);
     }
+    public void insert(String name) {
+        Lesson lesson = new Lesson(name);
+        mRepository.insert(lesson);
+    }
 
+    public void delete(Lesson lesson) {
+        mRepository.delete(lesson);
+    }
 }

@@ -1,0 +1,13 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/_OxFordBlue" />
+
+    <!-- Bo góc -->
+    <corners android:radius="24dp" />
+
+
+    <!-- Tùy chọn: thêm viền -->
+    <!-- <stroke android:width="2dp" android:color="@color/black" /> -->
+
+    <!-- Tùy chọn: padding nội bộ -->
+    <!-- <padding android:top="8dp" android:bottom="8dp" android:left="8dp" android:right="8dp"/> -->
+</shape>

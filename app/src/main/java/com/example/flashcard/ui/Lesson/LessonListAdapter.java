@@ -6,12 +6,15 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
+
+import com.example.flashcard.LessonListActivity;
 import com.example.flashcard.R;
 import com.example.flashcard.data.Lesson;
 public class LessonListAdapter extends ListAdapter<Lesson, LessonViewHolder> {
     private LessonClickListener listener;
-    public LessonListAdapter() {
+    public LessonListAdapter(LessonClickListener listener) {
         super(DIFF_CALLBACK);
+        this.listener = listener;
     }
 
     private static final DiffUtil.ItemCallback<Lesson> DIFF_CALLBACK =

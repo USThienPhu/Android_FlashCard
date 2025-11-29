@@ -22,7 +22,7 @@ public class FlashcardListAdapter
     }
 
     private static final DiffUtil.ItemCallback<Flashcard> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Flashcard>() {
+            new DiffUtil.ItemCallback<>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull Flashcard oldItem, @NonNull Flashcard newItem) {
                     return oldItem.getId() == newItem.getId();

@@ -26,4 +26,11 @@ public class LessonRepository {
             mLessonDao.insert(lesson);
         });
     }
+
+    public void delete(Lesson lesson)
+    {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            mLessonDao.delete(lesson);
+        });
+    }
 }
