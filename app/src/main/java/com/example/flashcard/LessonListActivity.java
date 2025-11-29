@@ -9,13 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.flashcard.data.Lesson;
-import com.example.flashcard.ui.LessonListAdapter;
+import com.example.flashcard.ui.Lesson.LessonListAdapter;
 import com.example.flashcard.viewmodel.LessonViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.widget.Toast;
 
-import java.util.List;
 
 public class LessonListActivity extends AppCompatActivity {
 
@@ -45,13 +44,9 @@ public class LessonListActivity extends AppCompatActivity {
             Toast.makeText(this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
             // TODO: Chuyển qua màn hình Flashcard theo LessonId
             Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
-
             // Gửi ID bài học (Quan trọng nhất)
             intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
-
             // Gửi thêm tên để hiển thị tiêu đề cho đẹp (Tùy chọn)
-            intent.putExtra("KEY_TOPIC_NAME", lesson.getName()); // Giả sử Lesson có hàm getLessonName()
-
             startActivity(intent);
         });
 

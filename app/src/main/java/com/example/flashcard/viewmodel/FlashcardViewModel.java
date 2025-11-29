@@ -15,9 +15,7 @@ public class FlashcardViewModel extends AndroidViewModel{
 
     public FlashcardViewModel(@NonNull Application application) {
         super(application);
-        // Khởi tạo Repository
         mRepository = new FlashcardRepository(application);
-        // Lấy dữ liệu ngay khi ViewModel được tạo
         mAllFlashcards = mRepository.getAllFlashcards();
     }
 
@@ -33,7 +31,13 @@ public class FlashcardViewModel extends AndroidViewModel{
 
     // UI gọi hàm này để thêm thẻ mới
     public void insert(Flashcard flashcard) {
+
         mRepository.insert(flashcard);
+    }
+    public void insert(String front, String back, int id)
+    {
+        Flashcard card = new Flashcard(front, back, id);
+        mRepository.insert(card);
     }
 
     // UI gọi hàm này để xóa thẻ
