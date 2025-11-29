@@ -45,9 +45,7 @@ public class FlashcardViewHolder extends RecyclerView.ViewHolder {
                         Flashcard currentCard = (Flashcard) v.getTag();
 
                         if (currentCard == null) return false; // Kiểm tra an toàn
-
                         int id = item.getItemId();
-
                         if (id == R.id.action_edit) {
                             // Báo cho Activity biết: "Sửa thẻ này đi"
                             listener.onEditClick(currentCard);

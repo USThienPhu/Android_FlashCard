@@ -1,5 +1,7 @@
 package com.example.flashcard;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +25,41 @@ public class MainActivity extends AppCompatActivity {
     public static final int ADD_FLASHCARD_REQUEST = 1;
     private FlashcardViewModel mFlashcardViewModel;
     private int currentLessonId = -1;
+
+    ActivityResultLauncher<Intent> addEditLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+
+                        if (result.getResultCode() == RESULT_OK) {
+
+                            Intent data = result.getData();
+                            if (data == null) return;
+
+                            String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
+                            String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
+                            int id = data.getIntExtra(AddEditFlashcardActivity.EXTRA_ID, -1);
+
+                            if (id != -1) {
+                                // UPDATE
+                                Flashcard card = new Flashcard(front, back, currentLessonId);
+                                card.setId(id);
+                                mFlashcardViewModel.update(card);
+                                Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                // INSERT
+                                Flashcard newCard = new Flashcard(front, back, currentLessonId);
+                                mFlashcardViewModel.insert(newCard);
+                                Toast.makeText(this, "Đã tạo thẻ mới!", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            Toast.makeText(this, "Hủy thao tác!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +81,10 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra(AddEditFlashcardActivity.EXTRA_BACK, flashcard.getBackText());
                 // QUAN TRỌNG: Gửi ID để biết đây là thẻ nào
                 // (Bạn cần chắc chắn bên AddEditFlashcardActivity có biến EXTRA_ID, nếu chưa thì cứ dùng chuỗi cứng như dưới)
-                intent.putExtra("com.example.flashcard.EXTRA_ID", flashcard.getId());
-                startActivityForResult(intent, ADD_FLASHCARD_REQUEST);
+//                intent.putExtra("com.example.flashcard.EXTRA_ID", flashcard.getId());
+                intent.putExtra(AddEditFlashcardActivity.EXTRA_ID, flashcard.getId());
+//                startActivityForResult(intent, ADD_FLASHCARD_REQUEST);
+                addEditLauncher.launch(intent);
             }
             @Override
             public void onDeleteClick(Flashcard flashcard) {
@@ -56,19 +95,8 @@ public class MainActivity extends AppCompatActivity {
         });
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        // 2. Kết nối ViewModel
         mFlashcardViewModel = new ViewModelProvider(this).get(FlashcardViewModel.class);
 
-        // 3. Quan sát dữ liệu (Observer)
-        // Bất cứ khi nào database thay đổi, đoạn code trong onChanged sẽ chạy
-//        mFlashcardViewModel.getAllFlashcards().observe(this, new androidx.lifecycle.Observer<List<Flashcard>>() {
-//            @Override
-//            public void onChanged(List<Flashcard> flashcards) {
-//                // Cập nhật danh sách mới vào Adapter
-//                adapter.submitList(flashcards);
-//            }
-//        });
         Intent lessonintent = getIntent();
         if (lessonintent.hasExtra("KEY_LESSON_ID")) {
             // 1. Lấy ID bài học ra và lưu vào biến toàn cục
@@ -83,56 +111,42 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
-        // 4. Xử lý click vào item (Ví dụ: Để sửa hoặc xem chi tiết lật mặt)
-    //        adapter.setOnItemClickListener(flashcard -> {
-//            Intent FlipIntent = new Intent(MainActivity.this, FlipActivity.class);
-//            FlipIntent.putExtra("front", flashcard.getFrontText());
-//            FlipIntent.putExtra("back", flashcard.getBackText());
-//            startActivity(FlipIntent);
-//        });
-//        adapter.setOnItemClickListener();
 
-        // Nút FAB để thêm mới (sẽ code ở bước sau)
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddEditFlashcardActivity.class);
-            // Mở Activity và CHỜ kết quả trả về
-            startActivityForResult(intent, ADD_FLASHCARD_REQUEST);
+            addEditLauncher.launch(intent);
         });
     }
 
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == ADD_FLASHCARD_REQUEST && resultCode == RESULT_OK) {
-            String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
-            String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
-
-            // Lấy ID trả về (Mặc định là -1 nếu không có)
-            int id = data.getIntExtra("com.example.flashcard.EXTRA_ID", -1);
-
-            if (currentLessonId == -1) {
-                Toast.makeText(this, "Lỗi: Không xác định được bài học!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if (id != -1) {
-                // --- TRƯỜNG HỢP SỬA (UPDATE) ---
-                Flashcard updateCard = new Flashcard(front, back, currentLessonId);
-                updateCard.setId(id); // Quan trọng: Phải gán đúng ID cũ
-                mFlashcardViewModel.update(updateCard);
-                Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
-            } else {
-                // --- TRƯỜNG HỢP THÊM MỚI (INSERT) ---
-                Flashcard newCard = new Flashcard(front, back, currentLessonId);
-                mFlashcardViewModel.insert(newCard);
-                Toast.makeText(this, "Đã lưu thẻ mới!", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(this, "Hủy thao tác", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == ADD_FLASHCARD_REQUEST && resultCode == RESULT_OK) {
+//            String front = data.getStringExtra(AddEditFlashcardActivity.EXTRA_FRONT);
+//            String back = data.getStringExtra(AddEditFlashcardActivity.EXTRA_BACK);
+//
+//            // Lấy ID trả về (Mặc định là -1 nếu không có)
+//            int id = data.getIntExtra("com.example.flashcard.EXTRA_ID", -1);
+//            if (currentLessonId == -1) {
+//                Toast.makeText(this, "Lỗi: Không xác định được bài học!", Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//            if (id != -1) {
+//                // --- TRƯỜNG HỢP SỬA (UPDATE) ---
+//                Flashcard updateCard = new Flashcard(front, back, currentLessonId);
+//                updateCard.setId(id); // Quan trọng: Phải gán đúng ID cũ
+//                mFlashcardViewModel.update(updateCard);
+//                Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
+//            } else {
+//                // --- TRƯỜNG HỢP THÊM MỚI (INSERT) ---
+//                Flashcard newCard = new Flashcard(front, back, currentLessonId);
+//                mFlashcardViewModel.insert(newCard);
+//                Toast.makeText(this, "Đã lưu thẻ mới!", Toast.LENGTH_SHORT).show();
+//            }
+//        } else {
+//            Toast.makeText(this, "Hủy thao tác", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }
