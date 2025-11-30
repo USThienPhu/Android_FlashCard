@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.FlashCard" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor">#DBDABE</item>
+        <item name="android:statusBarColor">#EBEADE</item>
     </style>
 
 

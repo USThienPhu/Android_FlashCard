@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.flashcard.data.Flashcard;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private FlashcardViewModel mFlashcardViewModel;
     private int currentLessonId = -1;
     Button btnShuffle;
+    TextView tvLessonTitle;
 
     ActivityResultLauncher<Intent> addEditLauncher =
             registerForActivityResult(
@@ -110,5 +112,17 @@ public class MainActivity extends AppCompatActivity {
             // Cuộn lên đầu trang cho dễ nhìn
             recyclerView.scrollToPosition(0);
         });
+
+        // Trong onCreate()
+        TextView tvLessonTitle = findViewById(R.id.tvLessonTitle); // Ánh xạ
+
+        Intent intent = getIntent();
+        if (intent.hasExtra("KEY_LESSON_NAME")) {
+            String topicName = intent.getStringExtra("KEY_LESSON_NAME");
+            // Hiển thị tên bài lên TextView thay vì setTitle (trên thanh Action Bar)
+            tvLessonTitle.setText(topicName);
+            // (Tùy chọn) Ẩn thanh Action Bar mặc định đi cho đẹp
+//            if (getSupportActionBar() != null) getSupportActionBar().hide();
+        }
     }
 }

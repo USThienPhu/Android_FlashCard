@@ -50,6 +50,7 @@ public class LessonListActivity extends AppCompatActivity {
                 Toast.makeText(LessonListActivity.this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
                 intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
+                intent.putExtra("KEY_LESSON_NAME", lesson.getName());
                 startActivity(intent);
             }
 
