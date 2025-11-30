@@ -11,7 +11,7 @@ import androidx.room.Query;
 @Dao
 public interface LessonDao {
     @Insert
-    void insert(Lesson lesson);
+    long insert(Lesson lesson);
     @Delete
     void delete(Lesson lesson);
     @Query("SELECT * FROM lessons ORDER BY lessonId DESC")

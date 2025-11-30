@@ -1,13 +1,16 @@
 package com.example.flashcard.data;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Flashcard.class, Lesson.class}, version = 3, exportSchema = false)
+@Database(entities = {Flashcard.class, Lesson.class}, version = 4, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract FlashcardDao   flashcardDao();
     public abstract LessonDao lessonDao();
@@ -23,11 +26,22 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "flashcard_database")
-                            .fallbackToDestructiveMigration()
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+    private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            // Dữ liệu mẫu phải được thêm ở Background Thread
+            databaseWriteExecutor.execute(() -> {
+                DatabaseInitializer.populateAsync(INSTANCE);
+            });
+        }
+    };
 }
