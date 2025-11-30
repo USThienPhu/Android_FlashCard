@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.flashcard.data.Flashcard;
 import com.example.flashcard.ui.FlashCard.FlashcardListAdapter;
@@ -40,13 +39,10 @@ public class MainActivity extends AppCompatActivity {
                                 Flashcard card = new Flashcard(front, back, currentLessonId);
                                 card.setId(id);
                                 mFlashcardViewModel.update(card);
-                                Toast.makeText(this, "Đã cập nhật thẻ!", Toast.LENGTH_SHORT).show();
                             } else { // Insert
                                 mFlashcardViewModel.insert(front, back, currentLessonId);
-                                Toast.makeText(this, "Đã tạo thẻ mới!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(this, "Hủy thao tác!", Toast.LENGTH_SHORT).show();
                         }
                     }
             );
@@ -72,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDeleteClick(Flashcard flashcard) {
                 mFlashcardViewModel.delete(flashcard);
-                Toast.makeText(MainActivity.this, "Đã xóa thẻ!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -108,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
         btnShuffle.setOnClickListener(v -> {
             // Gọi hàm shuffle trong ViewModel
             mFlashcardViewModel.shuffle();
-            Toast.makeText(this, "Đã trộn thẻ!", Toast.LENGTH_SHORT).show();
             // Cuộn lên đầu trang cho dễ nhìn
             recyclerView.scrollToPosition(0);
         });

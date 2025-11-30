@@ -16,12 +16,10 @@ import com.example.flashcard.viewmodel.LessonViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.widget.Button;
-import android.widget.Toast;
 
 
 public class LessonListActivity extends AppCompatActivity {
     private LessonViewModel lessonViewModel;
-    Button btnShuffle;
     ActivityResultLauncher<Intent> addLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -33,7 +31,6 @@ public class LessonListActivity extends AppCompatActivity {
                             String lessonName = data.getStringExtra(AddLessonActivity.EXTRA_LESSON_NAME);
                             lessonViewModel.insert(lessonName);
                         } else {
-                            Toast.makeText(this, "Hủy thao tác!", Toast.LENGTH_SHORT).show();
                         }
                     }
             );
@@ -47,7 +44,6 @@ public class LessonListActivity extends AppCompatActivity {
         LessonListAdapter adapter = new LessonListAdapter(new com.example.flashcard.ui.Lesson.LessonClickListener() {
             @Override
             public void onItemClick(Lesson lesson) {
-                Toast.makeText(LessonListActivity.this, "Clicked: " + lesson.getName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LessonListActivity.this, MainActivity.class);
                 intent.putExtra("KEY_LESSON_ID", lesson.getLessonId());
                 intent.putExtra("KEY_LESSON_NAME", lesson.getName());
