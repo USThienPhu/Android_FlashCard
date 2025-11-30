@@ -5,15 +5,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:background="@color/_Pearl"
+    android:background="@drawable/background_sakura"
     >
 
     <Button
         android:id="@+id/btnStudy"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
-        android:text="Study"
+        android:text="Từ vựng"
         android:background="@drawable/button"
         android:backgroundTint="@null"
         android:textSize="40sp"
@@ -24,10 +24,10 @@
 
     <Button
         android:id="@+id/btnSetting"
-        android:layout_width="200dp"
+        android:layout_width="250dp"
         android:layout_height="150dp"
         android:layout_gravity="center_horizontal"
-        android:text="Setting"
+        android:text="Cài đặt"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button"
