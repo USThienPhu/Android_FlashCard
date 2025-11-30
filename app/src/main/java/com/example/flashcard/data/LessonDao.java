@@ -14,6 +14,6 @@ public interface LessonDao {
     long insert(Lesson lesson);
     @Delete
     void delete(Lesson lesson);
-    @Query("SELECT * FROM lessons ORDER BY lessonId DESC")
+    @Query("SELECT * FROM lessons")
     LiveData<List<Lesson>> getAllLessons();
 }

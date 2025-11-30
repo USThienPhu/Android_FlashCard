@@ -17,13 +17,10 @@ public class AddLessonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_lesson);
-
         editTextLessonName = findViewById(R.id.editTextLessonName);
         Button buttonSave = findViewById(R.id.buttonSaveLesson);
-
         buttonSave.setOnClickListener(v -> {
             String lessonName = editTextLessonName.getText().toString().trim();
-
             Intent data = new Intent();
             data.putExtra(EXTRA_LESSON_NAME, lessonName);
             setResult(RESULT_OK, data);
