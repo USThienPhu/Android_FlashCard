@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.flashcard.data.FirebaseSeeder;
+
 public class MenuActivity  extends AppCompatActivity {
     private Button btnStudy;
     private Button btnSetting;
@@ -29,6 +31,7 @@ public class MenuActivity  extends AppCompatActivity {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                FirebaseSeeder.uploadDataToFirestore();
             }
         });
 
