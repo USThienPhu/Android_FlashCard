@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
         RecyclerView recyclerView = findViewById(R.id.recyclerview);
         final FlashcardListAdapter adapter = new FlashcardListAdapter(new com.example.flashcard.ui.FlashCard.FlashcardClickListener() {
             @Override

@@ -22,6 +22,9 @@ public interface FlashcardDao {
 
     @Query("SELECT * FROM flashcards WHERE lessonOwnerId = :lessonId")
     LiveData<List<Flashcard>> getFlashcardsByLessonId(int lessonId);
+
+    @Query("SELECT * FROM flashcards WHERE id = :id LIMIT 1")
+    Flashcard getById(int id);
     @Update
     void update(Flashcard flashcard);
 

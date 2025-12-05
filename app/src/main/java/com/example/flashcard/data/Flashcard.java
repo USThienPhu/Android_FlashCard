@@ -30,6 +30,8 @@ public class Flashcard {
         this.lessonOwnerId = lessonOwnerId; 
     }
 
+
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
     public int getLessonOwnerId() {

@@ -27,6 +27,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "flashcard_database")
                             .addCallback(sRoomDatabaseCallback)
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }
@@ -39,9 +40,9 @@ public abstract class AppDatabase extends RoomDatabase {
             super.onCreate(db);
 
             // Dữ liệu mẫu phải được thêm ở Background Thread
-            databaseWriteExecutor.execute(() -> {
-                DatabaseInitializer.populateAsync(INSTANCE);
-            });
+//            databaseWriteExecutor.execute(() -> {
+//                DatabaseInitializer.populateAsync(INSTANCE);
+//            });
         }
     };
 }
