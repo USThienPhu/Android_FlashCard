@@ -8,14 +8,11 @@ import androidx.lifecycle.LiveData;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class FlashcardRepository {
-    // QUAN TRỌNG: Tag này khớp với bộ lọc Logcat của bạn
     private static final String TAG = "DEBUG_FIREBASE";
 
     private FlashcardDao mFlashcardDao;
@@ -31,8 +28,15 @@ public class FlashcardRepository {
         mLessonDao = db.lessonDao();
         mAllFlashcards = mFlashcardDao.getAllFlashcards();
 
-        // Gọi đồng bộ ngay khi khởi tạo
-        syncDataFromFirebase();
+        // Delay 2 giây để đảm bảo LessonRepository đã sync xong lessons trước
+        executor.execute(() -> {
+            try {
+                Thread.sleep(2000); // Đợi 2 giây
+                syncDataFromFirebase();
+            } catch (InterruptedException e) {
+                Log.e(TAG, "Interrupted while waiting to sync flashcards", e);
+            }
+        });
     }
 
     public LiveData<List<Flashcard>> getAllFlashcards() {
@@ -47,74 +51,57 @@ public class FlashcardRepository {
         return mFlashcardDao.searchFlashcards(query);
     }
 
-    // --- LOGIC ĐỒNG BỘ: Firebase (String ID) -> Room (Int ID) ---
+    // --- LOGIC ĐỒNG BỘ: Chỉ sync Flashcards (Lessons được sync bởi LessonRepository) ---
     public void syncDataFromFirebase() {
-        Log.d(TAG, ">>> 1. BẮT ĐẦU ĐỒNG BỘ (Sync started)...");
-
-        firestore.collection("lessons").get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        int size = task.getResult().size();
-                        Log.d(TAG, ">>> 2. Tìm thấy " + size + " bài học (Lessons) trên Firebase.");
-
-                        if(size == 0) {
-                            Log.w(TAG, "!!! CẢNH BÁO: Không có Lesson nào trên Firebase để tải!");
-                            return;
-                        }
-
-                        executor.execute(() -> {
-                            Map<String, Integer> mapFirebaseIdToLocalId = new HashMap<>();
-
-                            for (DocumentSnapshot doc : task.getResult()) {
-                                String firebaseId = doc.getId();
-                                String name = doc.getString("name");
-
-                                // Insert Lesson vào Room để lấy ID kiểu Int
-                                Lesson lesson = new Lesson(name);
-                                long localId = mLessonDao.insert(lesson); // Insert trả về ID mới
-
-                                Log.d(TAG, "   + Đã lưu Lesson: " + name + " (ID máy: " + localId + ")");
-
-                                mapFirebaseIdToLocalId.put(firebaseId, (int) localId);
-                            }
-
-                            // Sau khi có Lesson ID, tải tiếp Flashcards
-                            fetchFlashcards(mapFirebaseIdToLocalId);
-                        });
-                    } else {
-                        Log.e(TAG, "!!! LỖI: Không tải được Lessons: ", task.getException());
-                    }
-                });
-    }
-
-    private void fetchFlashcards(Map<String, Integer> mapIds) {
-        Log.d(TAG, ">>> 3. Bắt đầu tải Flashcards...");
-
+        Log.d(TAG, ">>> [FlashcardRepository] Starting flashcard sync from Firestore...");
+        
         firestore.collection("flashcards").get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, ">>> 4. Tìm thấy " + task.getResult().size() + " thẻ trên Firebase.");
-
+                        int size = task.getResult().size();
+                        Log.d(TAG, ">>> [FlashcardRepository] Found " + size + " flashcards on Firestore.");
+                        
+                        if (size == 0) {
+                            Log.w(TAG, "!!! [FlashcardRepository] WARNING: No flashcards found on Firestore!");
+                            return;
+                        }
+                        
                         executor.execute(() -> {
                             int count = 0;
                             for (DocumentSnapshot doc : task.getResult()) {
-                                String firebaseLessonId = doc.getString("lessonId");
+                                String lessonId = doc.getString("lessonId");
                                 String front = doc.getString("front");
                                 String back = doc.getString("back");
-
-                                // Tìm xem thẻ này thuộc bài học nào (đã convert sang Int chưa)
-                                if (mapIds.containsKey(firebaseLessonId)) {
-                                    int localOwnerId = mapIds.get(firebaseLessonId);
-
-                                    Flashcard fc = new Flashcard(front, back, localOwnerId);
-                                    mFlashcardDao.insert(fc);
+                                
+                                // Tìm lesson trong database local bằng cách query Firestore để lấy tên
+                                if (lessonId != null) {
+                                    // Lấy thông tin lesson từ Firestore để tìm tên
+                                    firestore.collection("lessons").document(lessonId).get()
+                                            .addOnSuccessListener(lessonDoc -> {
+                                                if (lessonDoc.exists()) {
+                                                    String lessonName = lessonDoc.getString("name");
+                                                    
+                                                    // Tìm lesson trong Room database bằng tên
+                                                    executor.execute(() -> {
+                                                        Lesson localLesson = mLessonDao.getLessonByName(lessonName);
+                                                        
+                                                        if (localLesson != null) {
+                                                            Flashcard fc = new Flashcard(front, back, localLesson.getLessonId());
+                                                            mFlashcardDao.insert(fc);
+                                                            Log.d(TAG, "   + [FlashcardRepository] Saved flashcard for lesson: " + lessonName);
+                                                        } else {
+                                                            Log.w(TAG, "   ! [FlashcardRepository] Lesson not found: " + lessonName);
+                                                        }
+                                                    });
+                                                }
+                                            });
                                     count++;
                                 }
                             }
-                            Log.d(TAG, ">>> 5. HOÀN TẤT: Đã lưu thành công " + count + " thẻ vào máy.");
+                            Log.d(TAG, ">>> [FlashcardRepository] Flashcard sync initiated for " + count + " flashcards.");
                         });
                     } else {
-                        Log.e(TAG, "!!! LỖI: Không tải được Flashcards", task.getException());
+                        Log.e(TAG, "!!! [FlashcardRepository] ERROR: Failed to fetch flashcards", task.getException());
                     }
                 });
     }

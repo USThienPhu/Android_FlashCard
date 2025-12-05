@@ -16,4 +16,7 @@ public interface LessonDao {
     void delete(Lesson lesson);
     @Query("SELECT * FROM lessons")
     LiveData<List<Lesson>> getAllLessons();
+    
+    @Query("SELECT * FROM lessons WHERE name = :name LIMIT 1")
+    Lesson getLessonByName(String name);
 }
