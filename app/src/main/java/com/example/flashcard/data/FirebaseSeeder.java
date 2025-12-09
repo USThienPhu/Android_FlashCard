@@ -6,12 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 public class FirebaseSeeder {
     public static void  uploadDataToFirestore(){
+        final String SYSTEM_ID = "SYSTEM";
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         for (SampleData.LessonItem lesson : SampleData.getData()){
             Map<String, Object> lessonData = new HashMap<>();
             lessonData.put("name", lesson.name);
-
+            lessonData.put("userId", SYSTEM_ID);
             lessonData.put("order", lesson.order);
 
             db.collection("lessons")

@@ -18,10 +18,18 @@ public class Lesson {
         this.name = name;
     }
 
+    @Ignore
     public Lesson(String name, int displayOrder)
     {
         this.displayOrder = displayOrder;
         this.name = name;
+    }
+
+    public Lesson(String name, int displayOrder, String userId)
+    {
+        this.displayOrder = displayOrder;
+        this.name = name;
+        this.userId = userId;
     }
 
     public int getLessonId()
@@ -47,6 +55,11 @@ public class Lesson {
     {
         this.name = name;
     }
+    public void setUserId(String id)
+    {
+        this.userId = id;
+    }
+
     public void setDisplayOrder(int displayOrder)
     {
         this.displayOrder = displayOrder;
