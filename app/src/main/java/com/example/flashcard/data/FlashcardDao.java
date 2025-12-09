@@ -28,5 +28,7 @@ public interface FlashcardDao {
     @Update
     void update(Flashcard flashcard);
 
+    @Query("Select count(*) from flashcards")
+    int noFlashcard();
 
 }

@@ -28,15 +28,8 @@ public class FlashcardRepository {
         mLessonDao = db.lessonDao();
         mAllFlashcards = mFlashcardDao.getAllFlashcards();
 
-        // Delay 2 giây để đảm bảo LessonRepository đã sync xong lessons trước
-        executor.execute(() -> {
-            try {
-                Thread.sleep(2000); // Đợi 2 giây
-                syncDataFromFirebase();
-            } catch (InterruptedException e) {
-                Log.e(TAG, "Interrupted while waiting to sync flashcards", e);
-            }
-        });
+        checkDataFlashCard();
+
     }
 
     public LiveData<List<Flashcard>> getAllFlashcards() {
@@ -104,6 +97,26 @@ public class FlashcardRepository {
                         Log.e(TAG, "!!! [FlashcardRepository] ERROR: Failed to fetch flashcards", task.getException());
                     }
                 });
+    }
+
+    public void checkDataFlashCard()
+    {
+        executor.execute(()-> {
+            int no  = mFlashcardDao.noFlashcard();
+            if (no == 0){
+                try {
+                    Thread.sleep(2000);
+                    syncDataFromFirebase();
+                } catch (InterruptedException e) {
+                    Log.d(TAG, "Can not get data");
+                }
+            }
+            else
+            {
+                Log.d(TAG, "Already");
+            }
+
+        });
     }
 
     public void insert(Flashcard fc) { executor.execute(() -> mFlashcardDao.insert(fc)); }
