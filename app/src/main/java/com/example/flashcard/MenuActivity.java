@@ -45,8 +45,8 @@ public class MenuActivity  extends AppCompatActivity {
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseSeeder.uploadDataToFirestore();
-                Toast.makeText(MenuActivity.this, "Upload data to Firebase", Toast.LENGTH_SHORT).show();
+//                FirebaseSeeder.uploadDataToFirestore();
+//                Toast.makeText(MenuActivity.this, "Upload data to Firebase", Toast.LENGTH_SHORT).show();
             }
         });
 
