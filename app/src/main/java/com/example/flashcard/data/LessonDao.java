@@ -14,7 +14,7 @@ public interface LessonDao {
     long insert(Lesson lesson);
     @Delete
     void delete(Lesson lesson);
-    @Query("SELECT * FROM lessons")
+    @Query("SELECT * FROM lessons order by displayOrder asc")
     LiveData<List<Lesson>> getAllLessons();
 
     @Query("DELETE FROM lessons")
@@ -23,6 +23,8 @@ public interface LessonDao {
     @Query("select count(*) from lessons")
     int noLesson();
 
+    @Query("SELECT COALESCE(MAX(displayOrder), 0) FROM lessons")
+    int getMaxDisplayOrder();
 
     @Query("SELECT * FROM lessons WHERE name = :name LIMIT 1")
     Lesson getLessonByName(String name);

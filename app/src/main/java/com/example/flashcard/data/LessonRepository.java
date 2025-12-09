@@ -38,6 +38,14 @@ public class LessonRepository {
     public void insert(Lesson lesson) {
         AppDatabase.databaseWriteExecutor.execute(() -> mLessonDao.insert(lesson));
     }
+    public void insert(String name) {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            int currentMax = mLessonDao.getMaxDisplayOrder();
+            int newOrder = currentMax + 1;
+            Lesson newLesson = new Lesson(name, newOrder);
+            mLessonDao.insert(newLesson);
+        });
+    }
 
     public void delete(Lesson lesson) {
         AppDatabase.databaseWriteExecutor.execute(() -> mLessonDao.delete(lesson));
@@ -61,8 +69,11 @@ public class LessonRepository {
                             int count = 0;
                             for (DocumentSnapshot doc : task.getResult()) {
                                 String name = doc.getString("name");
+                                Long orderInFStore = doc.getLong("order");
+                                int displayOrder = orderInFStore != null ? orderInFStore.intValue() : 0;
+
                                 if (name != null && !name.isEmpty()) {
-                                    Lesson lesson = new Lesson(name);
+                                    Lesson lesson = new Lesson(name, displayOrder);
                                     long localId = mLessonDao.insert(lesson);
                                     count++;
                                     Log.d(TAG, "   + [LessonRepository] Saved lesson: " + name + " (Local ID: " + localId + ")");

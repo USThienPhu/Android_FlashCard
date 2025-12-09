@@ -12,7 +12,7 @@ public class FirebaseSeeder {
             Map<String, Object> lessonData = new HashMap<>();
             lessonData.put("name", lesson.name);
 
-            lessonData.put("order", System.currentTimeMillis());
+            lessonData.put("order", lesson.order);
 
             db.collection("lessons")
                     .add(lessonData)

@@ -33,8 +33,8 @@ public class LessonViewModel extends AndroidViewModel {
         mRepository.insert(lesson);
     }
     public void insert(String name) {
-        Lesson lesson = new Lesson(name);
-        mRepository.insert(lesson);
+//        Lesson lesson = new Lesson(name);
+        mRepository.insert(name);
     }
 
     public void delete(Lesson lesson) {

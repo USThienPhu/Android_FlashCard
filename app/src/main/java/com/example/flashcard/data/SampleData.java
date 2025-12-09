@@ -5,9 +5,11 @@ import java.util.List;
 public class SampleData {
     public static class LessonItem {
         String name;
+        int order;
         FlashcardItem[] cards;
 
-        public LessonItem(String name, FlashcardItem[] cards) {
+        public LessonItem(String name, int order, FlashcardItem[] cards) {
+            this.order = order;
             this.name = name;
             this.cards = cards;
         }
@@ -23,7 +25,7 @@ public class SampleData {
 
     public static List<LessonItem> getData() {
         List<LessonItem> data = new ArrayList<>();
-        data.add(new LessonItem("Bài 1: Chào hỏi & Giới thiệu", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 1: Chào hỏi & Giới thiệu",1, new FlashcardItem[]{
                 new FlashcardItem("わたし", "Toi"),
                 new FlashcardItem("あなた", "Anh/chị, ông/bà, bạn (ngôi II số ít)"),
                 new FlashcardItem("あのひと (あの人)", "Người kia"),
@@ -63,7 +65,7 @@ public class SampleData {
                 new FlashcardItem("日本 (にほん)", "Nhật"),
                 new FlashcardItem("ブラジル", "Brazil"),
         }));
-        data.add(new LessonItem("Bài 2: Đồ vật (Cái này/đó/kia)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 2: Đồ vật (Cái này/đó/kia)",2, new FlashcardItem[]{
                 new FlashcardItem("これ", "Cái này, đây (vật ở gần người nói)"),
                 new FlashcardItem("それ", "Cái đó, đó (vật ở gần người nghe)"),
                 new FlashcardItem("あれ", "Cái kia, kia (vật ở xa cả người nói và người nghe)"),
@@ -109,7 +111,7 @@ public class SampleData {
                 new FlashcardItem("これから　お世話になります", "Từ nay tôi rất mong được sự giúp đỡ của anh/chị."),
                 new FlashcardItem("こちらこそ［どうぞ］よろしく［お願いします］", "Chính tôi cũng mong được sự giúp đỡ của anh/chị"),
         }));
-        data.add(new LessonItem("Bài 3: Địa điểm & Vị trí", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 3: Địa điểm & Vị trí",3, new FlashcardItem[]{
                 new FlashcardItem("ここ", "Chỗ này, đây"),
                 new FlashcardItem("そこ", "Chỗ đó, đó"),
                 new FlashcardItem("あそこ", "Chỗ kia, kia"),
@@ -153,7 +155,7 @@ public class SampleData {
                 new FlashcardItem("じゃ", "Vậy thì, thế thì"),
                 new FlashcardItem("～をください", "Lấy cho tôi ～"),
         }));
-        data.add(new LessonItem("Bài 4: Thời gian & Động từ", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 4: Thời gian & Động từ",4, new FlashcardItem[]{
                 new FlashcardItem("おきます", "Dậy, thức dậy"),
                 new FlashcardItem("ねます", "Ngủ, đi ngủ"),
                 new FlashcardItem("はたらきます", "Làm việc"),
@@ -206,7 +208,7 @@ public class SampleData {
                 new FlashcardItem("何番 (なんばん)", "Số bao nhiêu, số mấy"),
                 new FlashcardItem("そちら", "Ông/bà, phía ông/phía bà"),
         }));
-        data.add(new LessonItem("Bài 5: Đi, Đến & Phương tiện", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 5: Đi, Đến & Phương tiện",5, new FlashcardItem[]{
                 new FlashcardItem("いきます", "Đi"),
                 new FlashcardItem("きます", "Đến"),
                 new FlashcardItem("かえります", "Trở về"),
@@ -266,7 +268,7 @@ public class SampleData {
                 new FlashcardItem("普通 (ふつう)", "Tàu thường (dừng cả ở các ga lẻ)"),
                 new FlashcardItem("急行 (きゅうこう)", "Tàu tốc hành"),
         }));
-        data.add(new LessonItem("Bài 6: Ăn uống & Hành động", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 6: Ăn uống & Hành động", 6,new FlashcardItem[]{
                 new FlashcardItem("たべます", "Ăn"),
                 new FlashcardItem("のみます", "Uống"),
                 new FlashcardItem("[たばこを～] すいます", "Hút [thuốc lá]"),
@@ -318,7 +320,7 @@ public class SampleData {
                 new FlashcardItem("何ですか (なんですか)。", "Cái gì vậy ? (Câu trả lời khi ai đó gọi mình)"),
                 new FlashcardItem("じゃ、また [あした]", "Hẹn gặp lại (ngày mai)"),
         }));
-        data.add(new LessonItem("Bài 7: Cho nhận & Công cụ", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 7: Cho nhận & Công cụ",7,new FlashcardItem[]{
                 new FlashcardItem("にもつ", "Đồ đạc, hành lý"),
                 new FlashcardItem("おかね", "Tiền"),
                 new FlashcardItem("切符 (きっぷ)", "Vé (tàu, xe)"),
@@ -365,7 +367,7 @@ public class SampleData {
                 new FlashcardItem("いただきます", "Mời anh/chị dùng/tôi xin phép ăn, uống, nhận"),
                 new FlashcardItem("ごちそうさまでした", "Cảm ơn anh chị đã chiêu đãi (dùng khi ăn xong)"),
         }));
-        data.add(new LessonItem("Bài 8: Tính từ (Đẹp/Xấu/Ngon...)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 8: Tính từ (Đẹp/Xấu/Ngon...)",8, new FlashcardItem[]{
                 new FlashcardItem("ハンサム[な]", "Đẹp trai"),
                 new FlashcardItem("きれい[な]", "Đẹp, sạch"),
                 new FlashcardItem("しずか[な]", "Yên tĩnh"),
@@ -422,7 +424,7 @@ public class SampleData {
                 new FlashcardItem("いいえ。", "Không có gì/ Không sao cả."),
                 new FlashcardItem("また　いらっしゃってください。", "Lần sau anh/chị đến chơi nữa nhé."),
         }));
-        data.add(new LessonItem("Bài 9: Sở thích & Năng lực", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 9: Sở thích & Năng lực", 9,new FlashcardItem[]{
                 new FlashcardItem("(が) わかります", "Hiểu, nắm được"),
                 new FlashcardItem("(が) あります", "Có (sở hữu)"),
                 new FlashcardItem("すき[な]", "Thích"),
@@ -471,7 +473,7 @@ public class SampleData {
                 new FlashcardItem("いいですよ。", "Được chứ./ Được ạ."),
                 new FlashcardItem("残念です [が] (ざんねんです)。", "Thật đáng tiếc nhỉ/ buồn nhỉ"),
         }));
-        data.add(new LessonItem("Bài 10: Sự tồn tại (Có người/vật)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 10: Sự tồn tại (Có người/vật)",10, new FlashcardItem[]{
                 new FlashcardItem("あります", "Có, ở (dùng cho đồ vật)"),
                 new FlashcardItem("います", "Có, ở (dùng cho người, động vật)"),
                 new FlashcardItem("いろいろ[な]", "Nhiều, đa dạng"),
@@ -520,7 +522,7 @@ public class SampleData {
                 new FlashcardItem("コーナー", "Góc, khu vực"),
                 new FlashcardItem("いちばん　下 (した)", "Ở dưới cùng"),
         }));
-        data.add(new LessonItem("Bài 11: Số lượng từ & Đếm", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 11: Số lượng từ & Đếm",11, new FlashcardItem[]{
                 new FlashcardItem("サンドイッチ", "Bánh Sandwich"),
                 new FlashcardItem("カレー(ライス)", "(Cơm) cà ri"),
                 new FlashcardItem("アイスクリーム", "Kem"),
@@ -581,7 +583,7 @@ public class SampleData {
                 new FlashcardItem("航空便 (こうくうびん)", "(Gửi) bằng đường hàng không"),
                 new FlashcardItem("お願いします (おねがいします)", "Nhờ anh/chị"),
         }));
-        data.add(new LessonItem("Bài 12: So sánh & Thời tiết", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 12: So sánh & Thời tiết",12, new FlashcardItem[]{
                 new FlashcardItem("かんたん[な]", "Đơn giản, dễ"),
                 new FlashcardItem("ちかい", "Gần"),
                 new FlashcardItem("とおい", "Xa"),
@@ -631,7 +633,7 @@ public class SampleData {
                 new FlashcardItem("わあ、すごい人ですね (ひと)。", "Ôi, (người) đông quá nhỉ!"),
                 new FlashcardItem("疲れました (つかれました)。", "Tôi mệt rồi."),
         }));
-        data.add(new LessonItem("Bài 13: Mong muốn (たい/ほしい)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 13: Mong muốn (たい/ほしい)",13, new FlashcardItem[]{
                 new FlashcardItem("遊びます (あそびます)", "Chơi"),
                 new FlashcardItem("泳ぎます (およぎます)", "Bơi"),
                 new FlashcardItem("迎えます (むかえます)", "Đón"),
@@ -663,7 +665,7 @@ public class SampleData {
                 new FlashcardItem("～で ございます", "(cách nói lịch sự của です)"),
                 new FlashcardItem("別々に (べつべつに)", "Riêng, riêng ra"),
         }));
-        data.add(new LessonItem("Bài 14: Động từ thể て", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 14: Động từ thể て", 14,new FlashcardItem[]{
                 new FlashcardItem("つけます (II)", "Bật (điện, máy điều hòa)"),
                 new FlashcardItem("けします (I)", "Tắt (điện, máy điều hòa)"),
                 new FlashcardItem("あけます (II)", "Mở (cửa, cửa sổ)"),
@@ -710,7 +712,7 @@ public class SampleData {
                 new FlashcardItem("これで　お願いします (おねがいします)。", "Gửi anh tiền này."),
                 new FlashcardItem("お釣り (おつり)", "Tiền thừa, tiền thối lại"),
         }));
-        data.add(new LessonItem("Bài 15: Cho phép & Cấm đoán", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 15: Cho phép & Cấm đoán", 15,new FlashcardItem[]{
                 new FlashcardItem("おきます (I)", "Đặt, để"),
                 new FlashcardItem("つくります (I)", "Làm, chế tạo, sản xuất"),
                 new FlashcardItem("うります (I)", "Bán"),
@@ -739,7 +741,7 @@ public class SampleData {
                 new FlashcardItem("思い出します (おもいだします)", "Nhớ lại, hồi tưởng lại"),
                 new FlashcardItem("いらっしゃいます", "(Kính ngữ của います)"),
         }));
-        data.add(new LessonItem("Bài 16: Nối câu & Cơ thể", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 16: Nối câu & Cơ thể",16, new FlashcardItem[]{
                 new FlashcardItem("[でんしゃに] のります", "Đi, lên [tàu]"),
                 new FlashcardItem("[でんしゃを] おります", "Xuống [tàu]"),
                 new FlashcardItem("のりかえます", "Chuyển, đổi (tàu)"),
@@ -792,7 +794,7 @@ public class SampleData {
                 new FlashcardItem("確認 (かくにん)", "Sự xác nhận, sự kiểm tra (～します：xác nhận)"),
                 new FlashcardItem("ボタン", "Nút"),
         }));
-        data.add(new LessonItem("Bài 17: Thể Nai & Xin đừng", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 17: Thể Nai & Xin đừng",17, new FlashcardItem[]{
                 new FlashcardItem("～までに", "Trước ～, cho đến trước ～ (chỉ giới hạn thời gian)"),
                 new FlashcardItem("ですから", "Vì thế, vì vậy, do đó"),
                 new FlashcardItem("どうしましたか", "Anh/Chị bị làm sao? (Cách bác sĩ hỏi bệnh nhân)"),
@@ -827,7 +829,7 @@ public class SampleData {
                 new FlashcardItem("2、3日 (に、さんにち)", "2, 3 ngày/vài ngày"),
                 new FlashcardItem("2、3～ (に、さん～)", "2, 3 ~ /vài ~ (\"~\" là hậu tố đếm)"),
         }));
-        data.add(new LessonItem("Bài 18: Thể từ điển (Có thể)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 18: Thể từ điển (Có thể)",18, new FlashcardItem[]{
                 new FlashcardItem("できます (II)", "Có thể"),
                 new FlashcardItem("あらいます (I)", "Rửa"),
                 new FlashcardItem("ひきます (I)", "Chơi (nhạc cụ)"),
@@ -855,7 +857,7 @@ public class SampleData {
                 new FlashcardItem("ほんとうですか。", "Thật không ạ?"),
                 new FlashcardItem("ぜひ", "Nhất định"),
         }));
-        data.add(new LessonItem("Bài 19: Thể た (Kinh nghiệm)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 19: Thể た (Kinh nghiệm)", 19,new FlashcardItem[]{
                 new FlashcardItem("[山に～] 登ります ([やまに～] のぼります)", "Leo (núi)"),
                 new FlashcardItem("[ホテルに] 泊まります ([ホテルに] とまります)", "Trọ (ở khách sạn)"),
                 new FlashcardItem("掃除します (そうじします)", "Dọn vệ sinh"),
@@ -881,7 +883,7 @@ public class SampleData {
                 new FlashcardItem("無理 [な] (むり [な])", "Không thể, quá sức"),
                 new FlashcardItem("体に いい (からだに いい)", "Tốt cho sức khỏe"),
         }));
-        data.add(new LessonItem("Bài 20: Thể thông thường", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 20: Thể thông thường",20, new FlashcardItem[]{
                 new FlashcardItem("いります (I)", "Cần (gì đó)"),
                 new FlashcardItem("しらべます (II)", "Tìm hiểu, điều tra"),
                 new FlashcardItem("しゅうりします (III)", "Sửa chữa, tu sửa"),
@@ -905,7 +907,7 @@ public class SampleData {
                 new FlashcardItem("よかったら", "Nếu anh/ chị thích thì"),
                 new FlashcardItem("いろいろ", "Nhiều, đa dạng"),
         }));
-        data.add(new LessonItem("Bài 21: Ý kiến", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 21: Ý kiến", 21,new FlashcardItem[]{
                 new FlashcardItem("思います (おもいます)", "Nghĩ"),
                 new FlashcardItem("言います (いいます)", "Nói"),
                 new FlashcardItem("勝ちます (かちます)", "Thắng"),
@@ -947,7 +949,7 @@ public class SampleData {
                 new FlashcardItem("もちろん", "Đương nhiên"),
                 new FlashcardItem("もう 帰らないと…… (もう かえらないと……)", "Tôi phải về bây giờ không thì …"),
         }));
-        data.add(new LessonItem("Bài 22: Định ngữ & Trang phục", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 22: Định ngữ & Trang phục",22, new FlashcardItem[]{
                 new FlashcardItem("[シャツを～] きます (II)", "Mặc (áo sơ mi,...)"),
                 new FlashcardItem("[くつを～] はきます (I)", "Đi, mặc (giày, quần,...)"),
                 new FlashcardItem("[ぼうしを～] かぶります (I)", "Đội (nón,...)"),
@@ -977,7 +979,7 @@ public class SampleData {
                 new FlashcardItem("押し入れ (おしいれ)", "Chỗ để chăn gối, đệm trong một căn phòng kiểu Nhật"),
                 new FlashcardItem("布団 (ふとん)", "Chăn, đệm kiểu Nhật"),
         }));
-        data.add(new LessonItem("Bài 23: Khi & Hỏi đường", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 23: Khi & Hỏi đường",23, new FlashcardItem[]{
                 new FlashcardItem("[せんせいに～] ききます (I)", "Hỏi (giáo viên)"),
                 new FlashcardItem("まわします (I)", "Vặn (nút)"),
                 new FlashcardItem("ひきます (I)", "Kéo"),
@@ -1001,7 +1003,7 @@ public class SampleData {
                 new FlashcardItem("なんかいも", "Nhiều lần"),
                 new FlashcardItem("～め", "Thứ - , số - ( biểu thị thứ tự)"),
         }));
-        data.add(new LessonItem("Bài 24: Cho nhận & Dẫn đi", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 24: Cho nhận & Dẫn đi", 24,new FlashcardItem[]{
                 new FlashcardItem("くれます (II)", "Cho, tặng (tôi)"),
                 new FlashcardItem("なおします (I)", "Sửa chữa"),
                 new FlashcardItem("つれていきます (I)", "Dẫn đi"),
@@ -1020,7 +1022,7 @@ public class SampleData {
                 new FlashcardItem("じぶんで", "Tự (mình), bản thân mình"),
                 new FlashcardItem("ほかに", "Ngoài ra, bên cạnh đó"),
         }));
-        data.add(new LessonItem("Bài 25: Điều kiện (Nếu/Sau khi)", new FlashcardItem[]{
+        data.add(new LessonItem("Bài 25: Điều kiện (Nếu/Sau khi)",25, new FlashcardItem[]{
                 new FlashcardItem("考えます (かんがえます)", "Nghĩ, suy nghĩ"),
                 new FlashcardItem("[駅に～] 着きます ([えきに～] つきます)", "Đến [ga]"),
                 new FlashcardItem("[年を～] 取ります ([としを～] とります)", "Thêm [tuổi]"),
