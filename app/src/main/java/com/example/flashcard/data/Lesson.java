@@ -10,6 +10,7 @@ public class Lesson {
     private int lessonId;
     private String name;
     private int displayOrder;
+    public String userId;
 
     @Ignore
     public Lesson(String name)
