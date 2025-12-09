@@ -16,7 +16,14 @@ public interface LessonDao {
     void delete(Lesson lesson);
     @Query("SELECT * FROM lessons")
     LiveData<List<Lesson>> getAllLessons();
-    
+
+    @Query("DELETE FROM lessons") // 'lessons' là tên bảng đặt trong @Entity
+    void deleteAllLessons();
+
+    @Query("select count(*) from lessons")
+    int noLesson();
+
+
     @Query("SELECT * FROM lessons WHERE name = :name LIMIT 1")
     Lesson getLessonByName(String name);
 }

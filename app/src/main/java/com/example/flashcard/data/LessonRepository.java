@@ -26,7 +26,9 @@ public class LessonRepository {
         mAllLessons = mLessonDao.getAllLessons();
         this.firestore = FirebaseFirestore.getInstance();
         // Sync lessons from Firestore on initialization
-        syncLessonsFromFirebase();
+
+        checkDataOnRoom();
+
     }
 
     public LiveData<List<Lesson>> getAllLessons() {
@@ -72,5 +74,17 @@ public class LessonRepository {
                         Log.e(TAG, "!!! [LessonRepository] ERROR: Failed to fetch lessons from Firestore", task.getException());
                     }
                 });
+    }
+
+    private void    checkDataOnRoom()
+    {
+        executor.execute(()->{
+            int count = mLessonDao.noLesson();
+            if (count == 0)
+            {
+                Log.d(TAG, "Start Sync Firebase");
+                syncLessonsFromFirebase();
+            }
+        });
     }
 }
