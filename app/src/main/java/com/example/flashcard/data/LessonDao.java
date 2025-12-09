@@ -17,7 +17,7 @@ public interface LessonDao {
     @Query("SELECT * FROM lessons")
     LiveData<List<Lesson>> getAllLessons();
 
-    @Query("DELETE FROM lessons") // 'lessons' là tên bảng đặt trong @Entity
+    @Query("DELETE FROM lessons")
     void deleteAllLessons();
 
     @Query("select count(*) from lessons")

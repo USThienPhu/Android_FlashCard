@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private FlashcardViewModel mFlashcardViewModel;
     private int currentLessonId = -1;
     Button btnShuffle;
-    TextView tvLessonTitle;
 
     ActivityResultLauncher<Intent> addEditLauncher =
             registerForActivityResult(

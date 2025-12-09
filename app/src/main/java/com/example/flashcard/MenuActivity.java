@@ -4,10 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.flashcard.data.FirebaseSeeder;
+
 
 public class MenuActivity  extends AppCompatActivity {
     private Button btnStudy;
@@ -22,12 +21,7 @@ public class MenuActivity  extends AppCompatActivity {
         btnSetting = findViewById(R.id.btnSetting);
 
 
-        btnStudy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openStudyActivity();
-            }
-        });
+        btnStudy.setOnClickListener(v -> openStudyActivity());
         btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

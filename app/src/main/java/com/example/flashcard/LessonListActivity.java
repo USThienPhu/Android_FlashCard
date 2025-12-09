@@ -15,16 +15,12 @@ import com.example.flashcard.ui.Lesson.LessonListAdapter;
 import com.example.flashcard.viewmodel.LessonViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.widget.Button;
-
-
 public class LessonListActivity extends AppCompatActivity {
     private LessonViewModel lessonViewModel;
     ActivityResultLauncher<Intent> addLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
                     result -> {
-
                         if (result.getResultCode() == RESULT_OK) {
                             Intent data = result.getData();
                             if (data == null) return;
@@ -62,7 +58,6 @@ public class LessonListActivity extends AppCompatActivity {
 
         // ViewModel
         lessonViewModel = new ViewModelProvider(this).get(LessonViewModel.class);
-
         lessonViewModel.getAllLessons().observe(this, adapter::submitList);
 
         FloatingActionButton fab = findViewById(R.id.fab_add_lesson);
