@@ -12,7 +12,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,14 +58,24 @@ public class LessonRepository {
         String myId = getCurrentUserId();
         if (myId == null) return;
 
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+        executor.execute(() -> {
+            // 1. TÍNH TOÁN SỐ THỨ TỰ & TẠO OBJECT
             int currentMax = mLessonDao.getMaxDisplayOrder();
             int newOrder = currentMax + 1;
-            // Tạo bài học mới gán với ID của người dùng hiện tại
-            Lesson newLesson = new Lesson(name, newOrder, myId);
-            mLessonDao.insert(newLesson);
 
-            // TODO: Ở đây nên có thêm hàm pushLessonToFirebase(newLesson)
+            Lesson newLesson = new Lesson(name, newOrder, myId);
+
+            // 2. LƯU VÀO ROOM (Lưu máy trước)
+            // Hàm insert của Room sẽ trả về cái ID tự tăng (ví dụ: 1, 2, 3...)
+            long rowId = mLessonDao.insert(newLesson);
+            int localId = (int) rowId; // Ép kiểu về int vì lessonId của bạn là int
+
+            Log.d(TAG, "Local saved success. ID: " + localId);
+
+            // 3. KIỂM TRA: NẾU LÀ GUEST THÌ DỪNG, NẾU LÀ USER THÌ UPLOAD
+            if (!myId.equals("GUEST_MODE")) {
+                pushLessonToCloud(localId, name, newOrder, myId);
+            }
         });
     }
 
@@ -177,5 +189,34 @@ public class LessonRepository {
             boolean isGuest = sharedPreferences.getBoolean("is_guest", false);
             return isGuest ? "GUEST_MODE" : null;
         }
+    }
+
+    // Hàm phụ trách đẩy dữ liệu lên Firestore
+    private void pushLessonToCloud(int localId, String name, int order, String userId) {
+        // Tạo gói dữ liệu để gửi đi
+        Map<String, Object> lessonData = new HashMap<>();
+        lessonData.put("name", name);
+        lessonData.put("order", order);
+        lessonData.put("userId", userId);
+
+        // Gửi lên Collection "lessons"
+        firestore.collection("lessons")
+                .add(lessonData)
+                .addOnSuccessListener(documentReference -> {
+                    // A. THÀNH CÔNG
+                    String firebaseId = documentReference.getId(); // Lấy ID chuỗi từ Cloud (ví dụ: "Xy7z...")
+                    Log.d(TAG, ">>> Upload SUCCESS. Firebase ID: " + firebaseId);
+
+                    // B. QUAY LẠI ROOM CẬP NHẬT CÁI ID NÀY
+                    executor.execute(() -> {
+                        mLessonDao.updateFirebaseId(localId, firebaseId);
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // C. THẤT BẠI (Mất mạng...)
+                    Log.e(TAG, ">>> Upload FAILED. Data exists in Local DB only.", e);
+                    // Dữ liệu vẫn an toàn trong Room, người dùng vẫn học bình thường.
+                    // (Sau này có thể làm tính năng đồng bộ lại sau)
+                });
     }
 }

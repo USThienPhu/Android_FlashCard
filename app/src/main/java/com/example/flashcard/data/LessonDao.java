@@ -28,4 +28,7 @@ public interface LessonDao {
 
     @Query("SELECT * FROM lessons WHERE name = :name LIMIT 1")
     Lesson getLessonByName(String name);
+
+    @Query("UPDATE lessons SET firebaseId = :firebaseId WHERE lessonId = :localId")
+    void updateFirebaseId(int localId, String firebaseId);
 }

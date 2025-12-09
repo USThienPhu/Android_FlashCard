@@ -11,6 +11,7 @@ public class Lesson {
     private String name;
     private int displayOrder;
     public String userId;
+    public String firebaseId;
 
     @Ignore
     public Lesson(String name)
