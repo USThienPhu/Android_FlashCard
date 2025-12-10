@@ -31,4 +31,8 @@ public interface LessonDao {
 
     @Query("UPDATE lessons SET firebaseId = :firebaseId WHERE lessonId = :localId")
     void updateFirebaseId(int localId, String firebaseId);
+
+    @Query("SELECT firebaseId FROM lessons WHERE lessonId = :localId")
+    String getLessonFirebaseId(int localId);
+
 }

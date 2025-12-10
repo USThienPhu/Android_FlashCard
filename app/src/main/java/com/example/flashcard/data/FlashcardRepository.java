@@ -2,13 +2,16 @@ package com.example.flashcard.data;
 
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -105,7 +108,7 @@ public class FlashcardRepository {
             int no  = mFlashcardDao.noFlashcard();
             if (no == 0){
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(1000);
                     syncDataFromFirebase();
                 } catch (InterruptedException e) {
                     Log.d(TAG, "Can not get data");
@@ -119,7 +122,28 @@ public class FlashcardRepository {
         });
     }
 
-    public void insert(Flashcard fc) { executor.execute(() -> mFlashcardDao.insert(fc)); }
+    public void insert(Flashcard fc) {
+        executor.execute(() ->
+        {
+            mFlashcardDao.insert(fc);
+            int lsId = fc.getLessonOwnerId();
+            String firebaseLessonId = mLessonDao.getLessonFirebaseId(lsId);
+
+            uploadFlashcard(fc, firebaseLessonId);
+        });
+
+    }
     public void update(Flashcard fc) { executor.execute(() -> mFlashcardDao.update(fc)); }
     public void delete(Flashcard fc) { executor.execute(() -> mFlashcardDao.delete(fc)); }
+
+    public void uploadFlashcard(Flashcard fc, String lessonId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> cardMap = new HashMap<>();
+        cardMap.put("front", fc.getFrontText());
+        cardMap.put("back", fc.getBackText());
+        cardMap.put("lessonId", lessonId);
+        db.collection("flashcards").add(cardMap);
+        Log.d("Skibidi", "Upload success");
+    }
+
 }

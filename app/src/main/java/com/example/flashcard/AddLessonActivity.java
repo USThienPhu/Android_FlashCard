@@ -19,6 +19,7 @@ public class AddLessonActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_lesson);
         editTextLessonName = findViewById(R.id.editTextLessonName);
         Button buttonSave = findViewById(R.id.buttonSaveLesson);
+
         buttonSave.setOnClickListener(v -> {
             String lessonName = editTextLessonName.getText().toString().trim();
             Intent data = new Intent();

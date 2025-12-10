@@ -52,8 +52,8 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (password.length() < 6) {
-            Toast.makeText(this, "Mật khẩu phải có ít nhất 6 ký tự", Toast.LENGTH_SHORT).show();
+        if (password.length() < 4) {
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 4 ký tự", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!password.equals(confirmPassword)) {
@@ -64,7 +64,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUser(String email, String password) {
-        // HÀM TẠO TÀI KHOẢN TRÊN FIREBASE
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
@@ -73,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                         // Firebase tự động đăng nhập luôn sau khi đăng ký
                         // Chuyển thẳng vào màn hình chính
-                        Intent intent = new Intent(RegisterActivity.this, LessonListActivity.class);
+                        Intent intent = new Intent(RegisterActivity.this, MenuActivity.class);
                         // Xóa các activity cũ để không back lại màn đăng ký được
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
