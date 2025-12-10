@@ -175,7 +175,7 @@ public class LessonRepository {
             Lesson lesson = new Lesson(name, displayOrder, ownerId);
 
             // Nếu bạn có trường firebaseId trong Entity thì set luôn
-//            lesson.firebaseId = doc.getId();
+            lesson.firebaseId = doc.getId();
 
             long rowId = mLessonDao.insert(lesson);
         }

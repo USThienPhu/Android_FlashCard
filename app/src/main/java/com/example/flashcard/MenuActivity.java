@@ -46,7 +46,7 @@ public class MenuActivity  extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                FirebaseSeeder.uploadDataToFirestore();
-                Toast.makeText(MenuActivity.this, "Upload data to Firebase", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MenuActivity.this, "Setting comming soon", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -56,4 +56,6 @@ public class MenuActivity  extends AppCompatActivity {
         Intent intent = new Intent(this, LessonListActivity.class);
         startActivity(intent);
     }
+
+    // Lỗi khi tạo mới lesson mới và thêm các flashcard thì sync được, khong đăng xuất và vào lại, thêm vào thì không sync
 }
